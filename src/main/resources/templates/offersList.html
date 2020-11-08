@@ -10,6 +10,24 @@
 </head>
 <body>
 <section layout:fragment="content">
+    <div id="offerFilter" class="panel panel-default">
+        <div class="panel-heading">Szukaj ofert</div>
+        <div class="panel-body">
+            <form id="offerFilterForm" action="/offers" method="get" class="form-inline" th:object="${offerFilter}">
+                <select class="form-control" th:field="*{manufacturerId}">
+                    <option value="">Marka</option>
+                    <option th:each="manufacturer : ${carManufacturers}" th:value="${manufacturer.id}" th:text="${manufacturer.name}"></option>
+                </select>
+                <select class="form-control" th:field="*{modelId}">
+                    <option value="">Model</option>
+                    <option th:each="model : ${carModels}" th:value="${model.id}" th:text="${model.name}"></option>
+                </select>
+
+                <input type="submit" value="Filtruj" class="form-control"/>
+            </form>
+        </div>
+    </div>
+
     <table class="table">
         <tr>
             <th>Tytuł</th>
