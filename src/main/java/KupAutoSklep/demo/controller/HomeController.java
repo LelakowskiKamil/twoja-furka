@@ -5,10 +5,13 @@ import KupAutoSklep.demo.service.CarModelsService;
 import KupAutoSklep.demo.service.OffersService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,16 +72,32 @@ public class HomeController {
     }
 
     @GetMapping("/newoffer")
-    public String newOfferForm(Model model, Offer offer, CarManufacturer carManufacturer, CarModelsService carModelsService, OfferFilter offerFilter){
-        List<CarManufacturer> carManufacturers = offersService.getCarManufacturers();
+    public String newOfferForm(Offer offer, CarManufacturer carManufacturer, CarModelsService carModelsService, OfferFilter offerFilter, Model model){
         List<CarModel> carModels = offersService.getCarModels();
         List<BodyStyle> bodyStyles = offersService.getBodyStyles();
         List<FuelType> fuelTypes = offersService.getFuelTypes();
 
-        model.addAttribute("carManufacturers", carManufacturers);
         model.addAttribute("carModels", carModels);
         model.addAttribute("bodyStyles", bodyStyles);
         model.addAttribute("fuelTypes", fuelTypes);
         return "offerForm";
+    }
+
+    @PostMapping("/newoffer")
+    public String saveNewOffer(@Valid Offer offer, BindingResult bindingResult, Model model){
+        if (bindingResult.hasErrors()){
+            List<CarModel> carModels = offersService.getCarModels();
+            List<BodyStyle> bodyStyles = offersService.getBodyStyles();
+            List<FuelType> fuelTypes = offersService.getFuelTypes();
+
+            model.addAttribute("carModels", carModels);
+            model.addAttribute("bodyStyles", bodyStyles);
+            model.addAttribute("fuelTypes", fuelTypes);
+            System.out.println("Blad!!!!");
+            return "offerForm";
+        }
+        offer = offersService.createOffer(offer);
+        System.out.println("dane poprawne");
+        return "redirect:/offer/"+offer.getId();
     }
 }

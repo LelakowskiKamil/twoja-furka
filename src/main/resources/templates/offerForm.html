@@ -55,14 +55,14 @@
                 </select>
             </div>
         </div>
-        <div class="form-group" th:object="${carManufacturer}">
-            <label class="col-sm-2 control-label">Marka:</label>
-            <div class="col-sm-9">
-                <select class="form-control" th:field="*{id}">
-                    <option th:each="m : ${carManufacturers}" th:value="${m.id}" th:text="${m.name}"></option>
-                </select>
-            </div>
-        </div>
+<!--        <div class="form-group" th:object="${carManufacturer}">-->
+<!--            <label class="col-sm-2 control-label">Marka:</label>-->
+<!--            <div class="col-sm-9">-->
+<!--                <select class="form-control" th:field="*{id}">-->
+<!--                    <option th:each="m : ${carManufacturers}" th:value="${m.id}" th:text="${m.name}"></option>-->
+<!--                </select>-->
+<!--            </div>-->
+<!--        </div>-->
         <div class="form-group">
             <label class="col-sm-2 control-label">Nadwozie:</label>
             <div class="col-sm-4">
@@ -70,9 +70,12 @@
                     <option th:each="bs : ${bodyStyles}" th:value="${bs.id}" th:text="${bs.name}"></option>
                 </select>
             </div>
+        </div>
+        <div class="form-group">
             <label class="col-sm-2 control-label">Rodzaj paliwa:</label>
             <div class="col-sm-4">
                 <select class="form-control" th:field="*{fuelType.id}">
+                    <option th:each="ft : ${fuelTypes}" th:value="${ft.id}" th:text="${ft.name}"></option>
                 </select>
             </div>
         </div>

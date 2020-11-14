@@ -6,9 +6,11 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class OffersService {
 
     @PersistenceContext
@@ -87,6 +89,11 @@ public class OffersService {
         query.setParameter("id",manufacturerId);
         List<Offer> result = query.getResultList();
         return result;
+    }
+
+    public Offer createOffer(Offer offer){
+        em.persist(offer);
+        return offer;
     }
 
 

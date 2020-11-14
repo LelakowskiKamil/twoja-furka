@@ -1,6 +1,10 @@
 package KupAutoSklep.demo.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
 @Entity
@@ -8,46 +12,68 @@ import java.math.BigDecimal;
 public class Offer {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
+    @NotNull
+    @Size(max = 255, min = 5)
     @Column(name = "title")
     private String title;
 
+    @NotNull
+    @Min(1900)
     @Column(name = "year")
     private Integer year;
 
+    @NotNull
+    @Min(0)
     @Column(name = "mileage")
     private Integer mileage;
 
+
     @Column(name = "engine_size")
+    @Min(0)
+    @Max(100)
     private BigDecimal engineSize;
 
     @Column(name = "engine_power")
+    @Min(0)
     private Integer enginePower;
 
+    @NotNull
+    @Min(1)
+    @Max(5)
     @Column(name = "doors")
     private Integer doors;
 
+    @NotNull
+    @Size(max = 30, min = 3)
     @Column(name = "colour")
     private String colour;
 
+    @NotNull
     @Lob
+    @Size(max = 65535, min = 5)
     @Column(name = "description")
     private String description;
 
+    @NotNull
+    @Min(0)
     @Column(name = "price")
     private Integer price;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "model_id", referencedColumnName = "id")
     private CarModel model;
 
+    @NotNull
     @JoinColumn(name = "body_style_id", referencedColumnName = "id")
     @ManyToOne
     private BodyStyle bodyStyle;
 
+    @NotNull
     @JoinColumn(name = "fuel_type_id", referencedColumnName = "id")
     @ManyToOne
     private FuelType fuelType;
