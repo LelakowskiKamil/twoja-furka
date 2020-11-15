@@ -22,7 +22,12 @@
                     <option value="">Model</option>
                     <option th:each="model : ${carModels}" th:value="${model.id}" th:text="${model.name}"></option>
                 </select>
-
+                <select class="form-control" th:field="*{fromYear}">
+                    <input type="number" class="form-control" th:field="*{fromYear}"/>
+                </select>
+                <select class="form-control" th:field="*{toYear}">
+                    <input type="number" class="form-control" th:field="*{toYear}"/>
+                </select>
                 <input type="submit" value="Filtruj" class="form-control"/>
             </form>
         </div>

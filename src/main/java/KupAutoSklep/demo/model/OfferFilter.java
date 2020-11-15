@@ -1,8 +1,12 @@
 package KupAutoSklep.demo.model;
 
+import java.util.List;
+
 public class OfferFilter {
    private Integer manufacturerId;
     private Integer modelId;
+    private Integer fromYear;
+    private Integer toYear;
 
     public Integer getManufacturerId() {
         return manufacturerId;
@@ -20,5 +24,19 @@ public class OfferFilter {
         this.modelId = modelId;
     }
 
+    public Integer getFromYear() {
+        return fromYear;
+    }
 
+    public void setFromYear(Integer fromYear) {
+        this.fromYear = fromYear;
+    }
+
+    public Integer getToYear() {
+        return toYear;
+    }
+
+    public void setToYear(Integer toYear) {
+        this.toYear = toYear;
+    }
 }

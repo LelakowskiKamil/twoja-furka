@@ -1,7 +1,6 @@
 package KupAutoSklep.demo.controller;
 
 import KupAutoSklep.demo.model.*;
-import KupAutoSklep.demo.service.CarModelsService;
 import KupAutoSklep.demo.service.OffersService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -55,24 +54,33 @@ public class HomeController {
     @GetMapping("/offers")
     public String home(Model model, OfferFilter offerFilter) {
         List<Offer> offers= offersService.getOffers();
-        if (offerFilter.getModelId() != null) {
-            offers = offers.stream()
-                    .filter(s -> s.getModel().getId().equals(offerFilter.getModelId())).collect(Collectors.toList());
-        }
+
         if (offerFilter.getManufacturerId() != null) {
             offers = offers.stream()
                     .filter(s -> s.getModel().getManufacturer().getId().equals(offerFilter.getManufacturerId())).collect(Collectors.toList());
+            if (offerFilter.getModelId() != null) {
+                offers = offers.stream()
+                        .filter(s -> s.getModel().getId().equals(offerFilter.getModelId())).collect(Collectors.toList());
+            }
+            List<CarModel> carModels = offersService.getCarModelByManufacturer(offerFilter.getManufacturerId());
+            model.addAttribute("carModels", carModels);
+        }
+        if (offerFilter.getFromYear()!=null){
+            offers = offers.stream()
+                    .filter((s -> s.getYear() >= offerFilter.getFromYear())).collect(Collectors.toList());
+        }
+        if (offerFilter.getToYear()!=null){
+            offers = offers.stream()
+                    .filter((s -> s.getYear() <= offerFilter.getToYear())).collect(Collectors.toList());
         }
         List<CarManufacturer> carManufacturers = offersService.getCarManufacturers();
-        List<CarModel> carModels = offersService.getCarModels();
         model.addAttribute("offers", offers);
         model.addAttribute("carManufacturers", carManufacturers);
-        model.addAttribute("carModels", carModels);
         return "offersList";
     }
 
     @GetMapping("/newoffer")
-    public String newOfferForm(Offer offer, CarManufacturer carManufacturer, CarModelsService carModelsService, OfferFilter offerFilter, Model model){
+    public String newOfferForm(Offer offer, CarManufacturer carManufacturer, OfferFilter offerFilter, Model model){
         List<CarModel> carModels = offersService.getCarModels();
         List<BodyStyle> bodyStyles = offersService.getBodyStyles();
         List<FuelType> fuelTypes = offersService.getFuelTypes();
