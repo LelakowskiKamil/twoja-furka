@@ -108,4 +108,11 @@ public class HomeController {
         System.out.println("dane poprawne");
         return "redirect:/offer/"+offer.getId();
     }
+
+    @RequestMapping("/deleteoffer/{id}")
+    public String deleteOffer(Model model, @PathVariable("id") Integer id) {
+Offer offer = offersService.deleteOffer(id);
+model.addAttribute("offer", offer);
+        return "deleteOffer";
+    }
 }
