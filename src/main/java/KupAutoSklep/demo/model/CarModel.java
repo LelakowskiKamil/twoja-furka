@@ -19,8 +19,8 @@ public class CarModel {
     @JoinColumn(name = "manufacturer_id",referencedColumnName = "id")
     private CarManufacturer manufacturer;
 
-//    @OneToMany(mappedBy = "model_id", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Offer> offers;
+    @OneToMany(mappedBy = "model")
+    private List<Offer> offers;
 
     public CarManufacturer getManufacturer() {
         return manufacturer;

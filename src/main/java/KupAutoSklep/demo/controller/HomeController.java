@@ -85,6 +85,8 @@ public class HomeController {
         List<BodyStyle> bodyStyles = offersService.getBodyStyles();
         List<FuelType> fuelTypes = offersService.getFuelTypes();
 
+        model.addAttribute("header", "Nowe ogłoszenie");
+        model.addAttribute("action", "/newoffer");
         model.addAttribute("carModels", carModels);
         model.addAttribute("bodyStyles", bodyStyles);
         model.addAttribute("fuelTypes", fuelTypes);
@@ -98,6 +100,8 @@ public class HomeController {
             List<BodyStyle> bodyStyles = offersService.getBodyStyles();
             List<FuelType> fuelTypes = offersService.getFuelTypes();
 
+            model.addAttribute("header", "Nowe ogłoszenie");
+            model.addAttribute("action", "/newoffer");
             model.addAttribute("carModels", carModels);
             model.addAttribute("bodyStyles", bodyStyles);
             model.addAttribute("fuelTypes", fuelTypes);
@@ -114,5 +118,42 @@ public class HomeController {
 Offer offer = offersService.deleteOffer(id);
 model.addAttribute("offer", offer);
         return "deleteOffer";
+    }
+
+    @RequestMapping("/editoffer/{id}")
+    public String editOffer(Model model, @PathVariable("id") Integer id) {
+        Offer offer = offersService.getOffer(id);
+        List<CarModel> carModels = offersService.getCarModels();
+        List<BodyStyle> bodyStyles = offersService.getBodyStyles();
+        List<FuelType> fuelTypes = offersService.getFuelTypes();
+
+        model.addAttribute("carModels", carModels);
+        model.addAttribute("bodyStyles", bodyStyles);
+        model.addAttribute("fuelTypes", fuelTypes);
+        model.addAttribute("offer", offer);
+        model.addAttribute("header", "Edycja ogłoszenia");
+        model.addAttribute("action", "/editoffer/" + id);
+        return "offerForm";
+    }
+
+    @PostMapping("/editoffer/{id}")
+    public String saveEditedOffer(Model model, @PathVariable("id") Integer id, @Valid Offer offer, BindingResult binding) {
+        if(binding.hasErrors()) {
+            model.addAttribute("header", "Edycja ogłoszenia");
+            model.addAttribute("action", "/editoffer/" + id);
+
+            List<CarModel> carModels = offersService.getCarModels();
+            List<BodyStyle> bodyStyles = offersService.getBodyStyles();
+            List<FuelType> fuelTypes = offersService.getFuelTypes();
+
+            model.addAttribute("carModels", carModels);
+            model.addAttribute("bodyStyles", bodyStyles);
+            model.addAttribute("fuelTypes", fuelTypes);
+
+            return "offerForm";
+        }
+        offersService.saveOffer(offer);
+
+        return "redirect:/offer/" + offer.getId();
     }
 }

@@ -1,6 +1,7 @@
 package KupAutoSklep.demo.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "fuel_type")
@@ -13,6 +14,9 @@ public class FuelType {
 
     @Column(name = "name")
     private String name;
+
+    @OneToMany(mappedBy = "fuelType")
+    private List<Offer> offers;
 
     public String getName() {
         return name;

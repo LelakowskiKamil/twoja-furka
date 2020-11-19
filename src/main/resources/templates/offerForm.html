@@ -3,14 +3,14 @@
       xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
       layout:decorator="layout">
 <head>
-    <title>Nowe ogłoszenie</title>
+    <title>${header}</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 <body>
 <section layout:fragment="content">
-    <h1>Nowe ogłoszenie</h1>
-    <form action="/newoffer" method="POST" class="form-horizontal" th:object="${offer}" >
+    <h1 th:text="${header}"></h1>
+    <form action="${action}" method="POST" class="form-horizontal" th:object="${offer}" >
         <div class="form-group">
             <label class="col-sm-2 control-label">Tytuł:</label>
             <div class="col-sm-10" th:classappend="${#fields.hasErrors('*{title}')?'has-error':''}">
@@ -103,6 +103,7 @@
         <div class="form-group">
             <div class="col-sm-4"></div>
             <div class="col-sm-4">
+                <input type="hidden" th:field="*{id}" />
                 <input type="submit" value="Zapisz" class="form-control btn btn-primary"/>
             </div>
             <div class="col-sm-4">

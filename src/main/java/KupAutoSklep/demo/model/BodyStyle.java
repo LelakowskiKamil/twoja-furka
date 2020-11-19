@@ -1,6 +1,7 @@
 package KupAutoSklep.demo.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "body_style")
@@ -13,6 +14,9 @@ public class BodyStyle {
 
     @Column(name = "name")
     private String name;
+
+    @OneToMany(mappedBy = "bodyStyle") //nazwa taka jak tabela
+    private List<Offer> offers;
 
     public String getName() {
         return name;
