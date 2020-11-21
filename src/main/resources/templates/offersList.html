@@ -6,8 +6,9 @@
     <title>Lista ofert</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://igoradamenko.github.io/awsm.css/css/awsm.min.css">
 
-</head>
+        </head>
 <body>
 <section layout:fragment="content">
     <div id="offerFilter" class="panel panel-default">
@@ -24,8 +25,17 @@
                 </select>
                     <input type="number" class="form-control" th:field="*{fromYear}"/>
                     <input type="number" class="form-control" th:field="*{toYear}"/>
+
                 <input type="submit" value="Filtruj" class="form-control"/>
+                <div th:if="${offers.totalPages > 0}" class="pagination"
+                     th:each="pageNumber : ${pageNumbers}">
+
+                    <a th:href="@{/offers(size=${offers.size}, page=${pageNumber}, fromYear=*{fromYear}, toYear=*{toYear}, manufacturerId=*{manufacturerId}, modelId=*{modelId})}"
+                       th:text=${pageNumber}
+                       th:class="${pageNumber==offers.number + 1} ? active"></a>
+                </div>
             </form>
+
         </div>
     </div>
 
