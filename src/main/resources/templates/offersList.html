@@ -4,11 +4,11 @@
       layout:decorator="layout">
 <head>
     <title>Lista ofert</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="https://igoradamenko.github.io/awsm.css/css/awsm.min.css">
 
-        </head>
+</head>
 <body>
 <section layout:fragment="content">
     <div id="offerFilter" class="panel panel-default">
@@ -17,14 +17,24 @@
             <form id="offerFilterForm" action="/offers" method="get" class="form-inline" th:object="${offerFilter}">
                 <select class="form-control" th:field="*{manufacturerId}">
                     <option value="">Marka</option>
-                    <option th:each="manufacturer : ${carManufacturers}" th:value="${manufacturer.id}" th:text="${manufacturer.name}"></option>
+                    <option th:each="manufacturer : ${carManufacturers}" th:value="${manufacturer.id}"
+                            th:text="${manufacturer.name}"></option>
                 </select>
                 <select class="form-control" th:field="*{modelId}">
                     <option value="">Model</option>
                     <option th:each="model : ${carModels}" th:value="${model.id}" th:text="${model.name}"></option>
                 </select>
-                    <input type="number" class="form-control" th:field="*{fromYear}"/>
-                    <input type="number" class="form-control" th:field="*{toYear}"/>
+                <input type="number" class="form-control" th:field="*{fromYear}"/>
+                <input type="number" class="form-control" th:field="*{toYear}"/>
+                <select class="form-control" th:field="*{sortBy}">
+                    <option value="">Sortuj po:</option>
+                    <option th:each="attributes : ${attributes}" th:value="${attributes}" th:text="${attributes}"></option>
+                </select>
+                <select class="form-control" th:field="*{order}">
+                    <option value="">W kolejności:</option>
+                    <option th:each="orders : ${orders}" th:value="${orders}" th:text="${orders}"></option>
+                </select>
+
 
                 <input type="submit" value="Filtruj" class="form-control"/>
                 <div th:if="${offers.totalPages > 0}" class="pagination"
@@ -46,7 +56,7 @@
             <th>Model</th>
             <th>Rocznik</th>
             <th>Cena</th>
-            <th>  </th>
+            <th></th>
         </tr>
         <tr th:each="offer : ${offers}">
             <td th:text="${offer.title}"></td>

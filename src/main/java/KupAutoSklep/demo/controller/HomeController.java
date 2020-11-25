@@ -2,7 +2,6 @@ package KupAutoSklep.demo.controller;
 
 import KupAutoSklep.demo.model.*;
 import KupAutoSklep.demo.service.OffersService;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,8 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -63,15 +61,21 @@ public class HomeController {
 //    }
 
     @GetMapping("/offers")
-    public String offersPage(Model model, OfferFilter offerFilter, @RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size) {
+    public String offersPage(
+            Model model,
+            OfferFilter offerFilter,
+            @RequestParam("page") Optional<Integer> page,
+            @RequestParam("size") Optional<Integer> size,
+            @RequestParam("sortBy") Optional<String> sortBy,
+            @RequestParam("order") Optional<String> order) {
         int currentPage = page.orElse(1);
-        int pageSize = size.orElse(1);
+        int pageSize = size.orElse(4);
+        String sortCriterion = sortBy.orElse("price");
+        String orderDirection = order.orElse("rosnąco");
 
 
+        Page<Offer> offersPage = offersService.paginateOffers(PageRequest.of(currentPage - 1, pageSize),offerFilter, sortCriterion,orderDirection);
 
-
-
-        Page<Offer> offersPage = offersService.findPaginated(PageRequest.of(currentPage - 1, pageSize),offerFilter);
         model.addAttribute("offers", offersPage);
         int totalPages = offersPage.getTotalPages();
         if (totalPages > 0) {
@@ -85,6 +89,11 @@ public class HomeController {
             List<CarModel> carModels = offersService.getCarModelByManufacturer(offerFilter.getManufacturerId());
             model.addAttribute("carModels", carModels);
         }
+        List<String> attributes = Arrays.asList("tytuł", "rok", "przebieg", "pojemnosc silnika", "moc", "ilość drzwi", "kolor", "cena", "model", "rodzaj nadwozia", "rodzaj paliwa");
+        List<String> orders = Arrays.asList("rosnąco", "malejąco");
+
+        model.addAttribute("attributes", attributes);
+        model.addAttribute("orders", orders);
         model.addAttribute("carManufacturers", carManufacturers);
         return "offersList";
     }

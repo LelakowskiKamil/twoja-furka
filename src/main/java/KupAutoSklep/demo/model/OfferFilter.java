@@ -1,16 +1,29 @@
 package KupAutoSklep.demo.model;
 
-import java.util.List;
-
 public class OfferFilter {
    private Integer manufacturerId;
     private Integer modelId;
     private Integer fromYear;
     private Integer toYear;
     private Integer page;
+    private String sortBy;
+    private String order;
 
+    public String getOrder() {
+        return order;
+    }
 
+    public void setOrder(String order) {
+        this.order = order;
+    }
 
+    public String getSortBy() {
+        return sortBy;
+    }
+
+    public void setSortBy(String sortBy) {
+        this.sortBy = sortBy;
+    }
 
     public Integer getPage() {
         return page;

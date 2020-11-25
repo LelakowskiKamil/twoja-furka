@@ -11,8 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,6 +41,7 @@ public class OffersService {
     private final BodyStyleRepository bodyStyleRepository;
     private final CarManufacturerRepository carManufacturerRepository;
 
+
     public CarManufacturer gerCarManufacturer(int id) {
         return em.find(CarManufacturer.class, id);
     }
@@ -67,53 +67,78 @@ public class OffersService {
     }
 
 
-    public List<Offer> filterByYearFrom(List<Offer> offers, int yearFrom){
+    public List<Offer> filterByYearFrom(List<Offer> offers, int yearFrom) {
         offers = offers.stream()
                 .filter((s -> s.getYear() >= yearFrom)).collect(Collectors.toList());
         return offers;
     }
-    public List<Offer> filterByYearTo(List<Offer> offers, int yearTo){
+
+    public List<Offer> filterByYearTo(List<Offer> offers, int yearTo) {
         offers = offers.stream()
                 .filter((s -> s.getYear() <= yearTo)).collect(Collectors.toList());
         return offers;
     }
 
-    public List<Offer> filterByManufacturerId(List<Offer> offers, int manufacturerId){
-            offers = offers.stream()
-                    .filter(s -> s.getModel().getManufacturer().getId().equals(manufacturerId)).collect(Collectors.toList());
+    public List<Offer> filterByManufacturerId(List<Offer> offers, int manufacturerId) {
+        offers = offers.stream()
+                .filter(s -> s.getModel().getManufacturer().getId().equals(manufacturerId)).collect(Collectors.toList());
 
         return offers;
     }
-    public List<Offer> filterByModelId(List<Offer> offers, int modelId, int manufacturerId){
-            offers = filterByManufacturerId(offers,manufacturerId);
+
+    public List<Offer> filterByModelId(List<Offer> offers, int modelId, int manufacturerId) {
+        offers = filterByManufacturerId(offers, manufacturerId);
         offers = offers.stream()
                 .filter(s -> s.getModel().getId().equals(modelId)).collect(Collectors.toList());
         return offers;
     }
 
+    public List<Offer> filterOffers(List<Offer> offersToFilter, OfferFilter offerFilter) {
+        if (offerFilter.getFromYear() != null) {
+            offersToFilter = filterByYearFrom(offersToFilter, offerFilter.getFromYear());
+        }
+        if (offerFilter.getToYear() != null) {
+            offersToFilter = filterByYearTo(offersToFilter, offerFilter.getToYear());
+        }
+        if (offerFilter.getManufacturerId() != null) {
+            offersToFilter = filterByManufacturerId(offersToFilter, offerFilter.getManufacturerId());
+            if (offerFilter.getModelId() != null) {
+                offersToFilter = filterByModelId(offersToFilter, offerFilter.getModelId(), offerFilter.getManufacturerId());
 
-    public Page<Offer> findPaginated(Pageable pageable, OfferFilter offerFilter ) {
+            }
+        }
+        return offersToFilter;
+
+    }
+
+
+    public Page<Offer> paginateOffers(Pageable pageable, OfferFilter offerFilter, String sortBy, String order) {
         int pageSize = pageable.getPageSize();
         int currentPage = pageable.getPageNumber();
         int startItem = currentPage * pageSize;
         List<Offer> list;
+        List<Offer> offers;
 
-        List<Offer> offers = getOffers();
-        if (offerFilter.getFromYear() != null) {
-            offers = filterByYearFrom(offers,offerFilter.getFromYear());
-        }
-        if (offerFilter.getToYear() != null) {
-            offers = filterByYearTo(offers,offerFilter.getToYear());
-        }
-        if (offerFilter.getManufacturerId() != null) {
-            offers = filterByManufacturerId(offers,offerFilter.getManufacturerId());
-            if (offerFilter.getModelId() != null) {
-                offers = filterByModelId(offers, offerFilter.getModelId(), offerFilter.getManufacturerId());
+        Map<String, String> viewNameToDBColumnName = new TreeMap<>();
+        viewNameToDBColumnName.put("tytuł", "title");
+        viewNameToDBColumnName.put("rok", "year");
+        viewNameToDBColumnName.put("przebieg", "mileage");
+        viewNameToDBColumnName.put("pojemnosc silnika", "engineSize");
+        viewNameToDBColumnName.put("moc", "enginePower");
+        viewNameToDBColumnName.put("ilość drzwi", "doors");
+        viewNameToDBColumnName.put("kolor", "colour");
+        viewNameToDBColumnName.put("cena", "price");
+        viewNameToDBColumnName.put("model", "model");
+        viewNameToDBColumnName.put("rodzaj nadwozia", "bodyStyle");
+        viewNameToDBColumnName.put("rodzaj paliwa", "fuelType");
 
-            }
+        if (offerFilter.getSortBy() != null || offerFilter.getOrder() != null) {
+            sortBy = viewNameToDBColumnName.get(sortBy);
         }
+        offers = getOffersOrdered(sortBy, order);
 
-        System.out.println(offers.toString());
+        offers = filterOffers(offers, offerFilter);
+
 
         if (offers.size() < startItem) {
             list = Collections.emptyList();
@@ -121,21 +146,31 @@ public class OffersService {
             int toIndex = Math.min(startItem + pageSize, offers.size());
             list = offers.subList(startItem, toIndex);
         }
-
         Page<Offer> offerPage
-                = new PageImpl<Offer>(list, PageRequest.of(currentPage, pageSize), offers.size());
+                = new PageImpl<>(list, PageRequest.of(currentPage, pageSize), offers.size());
         System.out.println(offerPage.toString());
         System.out.println(offerPage.getTotalPages());
         System.out.println(offerPage.getTotalElements());
         return offerPage;
     }
 
-    public List<Offer> getOffers(){
+    public List<Offer> getOffers() {
         List<Offer> offers = offerRepository.findAll();
 
         return offers;
     }
 
+    public List getOffersOrdered(String sortBy, String order) {
+        if (order.equals("rosnąco")) {
+            order = "ASC";
+        } else {
+            order = "DESC";
+        }
+
+        String q = "SELECT o FROM Offer o order by " + sortBy + " " + order;
+        return em.createQuery(q)
+                .getResultList();
+    }
 
 
     public Offer getOffer(int offerId) {
