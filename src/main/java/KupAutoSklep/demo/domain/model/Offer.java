@@ -1,4 +1,4 @@
-package KupAutoSklep.demo.model;
+package KupAutoSklep.demo.domain.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;

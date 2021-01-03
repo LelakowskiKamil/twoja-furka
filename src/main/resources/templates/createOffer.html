@@ -3,15 +3,15 @@
       xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
       layout:decorator="layout">
 <head>
-    <title>${header}</title>
+    <title>Create Offer</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://igoradamenko.github.io/awsm.css/css/awsm.min.css">
 </head>
 <body>
 <section layout:fragment="content">
-    <h1 th:text="${header}"></h1>
-    <form action="${action}" method="POST" class="form-horizontal" th:object="${offer}" >
+    <h1>Create new offer</h1>
+    <form action="/newoffer" method="POST" class="form-horizontal" th:object="${offer}" >
         <div class="form-group">
             <label class="col-sm-2 control-label">Tytuł:</label>
             <div class="col-sm-10" th:classappend="${#fields.hasErrors('*{title}')?'has-error':''}">
@@ -20,7 +20,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label">Rocznik:</label>\
+            <label class="col-sm-2 control-label">Rocznik:</label>
             <div class="col-sm-4" th:classappend="${#fields.hasErrors('*{year}')?'has-error':''}">
                 <input type="number" class="form-control" th:field="*{year}" />
                 <div class="error-message" th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></div>

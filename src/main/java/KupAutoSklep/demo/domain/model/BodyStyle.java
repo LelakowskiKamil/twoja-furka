@@ -1,21 +1,21 @@
-package KupAutoSklep.demo.model;
+package KupAutoSklep.demo.domain.model;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "fuel_type")
-public class FuelType {
+@Table(name = "body_style")
+public class BodyStyle {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "fuelType")
+    @OneToMany(mappedBy = "bodyStyle") //nazwa taka jak tabela
     private List<Offer> offers;
 
     public String getName() {

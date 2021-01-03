@@ -1,7 +1,6 @@
-package KupAutoSklep.demo;
+package KupAutoSklep.demo.domain.repository;
 
-import KupAutoSklep.demo.model.BodyStyle;
-import KupAutoSklep.demo.model.FuelType;
+import KupAutoSklep.demo.domain.model.BodyStyle;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

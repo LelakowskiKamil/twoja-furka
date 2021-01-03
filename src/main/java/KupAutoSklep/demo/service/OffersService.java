@@ -1,11 +1,11 @@
 package KupAutoSklep.demo.service;
 
-import KupAutoSklep.demo.*;
-import KupAutoSklep.demo.model.*;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import KupAutoSklep.demo.domain.model.*;
+import KupAutoSklep.demo.domain.repository.BodyStyleRepository;
+import KupAutoSklep.demo.domain.repository.CarManufacturerRepository;
+import KupAutoSklep.demo.domain.repository.FuelTypeRepository;
+import KupAutoSklep.demo.domain.repository.OfferRepository;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -23,7 +23,6 @@ public class OffersService {
 
     public OffersService(EntityManager em,
                          OfferRepository offerRepository,
-                         CarModelRepository carModelRepository,
                          FuelTypeRepository fuelTypeRepository,
                          BodyStyleRepository bodyStyleRepository,
                          CarManufacturerRepository carManufacturerRepository) {
@@ -112,30 +111,14 @@ public class OffersService {
     }
 
 
-    public Page<Offer> paginateOffers(Pageable pageable, OfferFilter offerFilter, String sortBy, String order) {
+    public Page<Offer> paginateOffers(Pageable pageable, OfferFilter offerFilter) {
         int pageSize = pageable.getPageSize();
         int currentPage = pageable.getPageNumber();
         int startItem = currentPage * pageSize;
         List<Offer> list;
         List<Offer> offers;
 
-        Map<String, String> viewNameToDBColumnName = new TreeMap<>();
-        viewNameToDBColumnName.put("tytuł", "title");
-        viewNameToDBColumnName.put("rok", "year");
-        viewNameToDBColumnName.put("przebieg", "mileage");
-        viewNameToDBColumnName.put("pojemnosc silnika", "engineSize");
-        viewNameToDBColumnName.put("moc", "enginePower");
-        viewNameToDBColumnName.put("ilość drzwi", "doors");
-        viewNameToDBColumnName.put("kolor", "colour");
-        viewNameToDBColumnName.put("cena", "price");
-        viewNameToDBColumnName.put("model", "model");
-        viewNameToDBColumnName.put("rodzaj nadwozia", "bodyStyle");
-        viewNameToDBColumnName.put("rodzaj paliwa", "fuelType");
-
-        if (offerFilter.getSortBy() != null || offerFilter.getOrder() != null) {
-            sortBy = viewNameToDBColumnName.get(sortBy);
-        }
-        offers = getOffersOrdered(sortBy, order);
+        offers = getOffersOrdered(offerFilter);
 
         offers = filterOffers(offers, offerFilter);
 
@@ -160,16 +143,29 @@ public class OffersService {
         return offers;
     }
 
-    public List getOffersOrdered(String sortBy, String order) {
-        if (order.equals("rosnąco")) {
-            order = "ASC";
-        } else {
-            order = "DESC";
+    public List<Offer> getOffersOrdered(OfferFilter offerFilter) {
+        String sort;
+        String order;
+        if (offerFilter.getSortBy() == null || offerFilter.getSortBy().equals("")) {
+          sort = "price";
+        }else{
+            sort = offerFilter.getSortBy();
+            offerFilter.setSortBy(sort);
         }
 
-        String q = "SELECT o FROM Offer o order by " + sortBy + " " + order;
-        return em.createQuery(q)
-                .getResultList();
+        if (offerFilter.getOrder() == null || offerFilter.getOrder().equals("")) {
+            order = "ASC";
+        }else{
+            if (offerFilter.getOrder().equals("low to high")){
+                order = "ASC";
+                offerFilter.setOrder("low to high");
+            }else {
+                order = "DESC";
+                offerFilter.setOrder("high to low");
+            }
+        }
+
+        return offerRepository.findAll(Sort.by(Sort.Direction.fromString(order),sort));
     }
 
 

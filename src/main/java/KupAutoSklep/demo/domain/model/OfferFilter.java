@@ -1,4 +1,4 @@
-package KupAutoSklep.demo.model;
+package KupAutoSklep.demo.domain.model;
 
 public class OfferFilter {
    private Integer manufacturerId;
@@ -9,20 +9,22 @@ public class OfferFilter {
     private String sortBy;
     private String order;
 
+    public String getSortBy() {
+        return sortBy;
+    }
+
+
+
+    public void setSortBy(String sortBy) {
+        this.sortBy = sortBy;
+    }
+
     public String getOrder() {
         return order;
     }
 
     public void setOrder(String order) {
         this.order = order;
-    }
-
-    public String getSortBy() {
-        return sortBy;
-    }
-
-    public void setSortBy(String sortBy) {
-        this.sortBy = sortBy;
     }
 
     public Integer getPage() {

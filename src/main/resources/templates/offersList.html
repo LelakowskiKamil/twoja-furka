@@ -27,20 +27,19 @@
                 <input type="number" class="form-control" th:field="*{fromYear}"/>
                 <input type="number" class="form-control" th:field="*{toYear}"/>
                 <select class="form-control" th:field="*{sortBy}">
-                    <option value="">Sortuj po:</option>
-                    <option th:each="attributes : ${attributes}" th:value="${attributes}" th:text="${attributes}"></option>
+                    <option value="">Sort by:</option>
+                    <option th:each="attribute : ${attributes}" th:value="${attribute}" th:text="${attribute}"></option>
                 </select>
                 <select class="form-control" th:field="*{order}">
-                    <option value="">W kolejności:</option>
-                    <option th:each="orders : ${orders}" th:value="${orders}" th:text="${orders}"></option>
+                    <option value="">Order:</option>
+                    <option th:each="order : ${orders}" th:value="${order}" th:text="${order}"></option>
                 </select>
 
 
                 <input type="submit" value="Filtruj" class="form-control"/>
                 <div th:if="${offers.totalPages > 0}" class="pagination"
                      th:each="pageNumber : ${pageNumbers}">
-
-                    <a th:href="@{/offers(size=${offers.size}, page=${pageNumber}, fromYear=*{fromYear}, toYear=*{toYear}, manufacturerId=*{manufacturerId}, modelId=*{modelId})}"
+                    <a th:href="@{/offers(manufacturerId=*{manufacturerId}, modelId=*{modelId}, fromYear=*{fromYear}, toYear=*{toYear}, sortBy=*{sortBy}, order=*{order}, size=${offers.size}, page=${pageNumber}  )}"
                        th:text=${pageNumber}
                        th:class="${pageNumber==offers.number + 1} ? active"></a>
                 </div>

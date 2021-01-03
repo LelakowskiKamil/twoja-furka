@@ -1,9 +1,8 @@
-package KupAutoSklep.demo;
+package KupAutoSklep.demo.domain.repository;
 
-import KupAutoSklep.demo.model.BodyStyle;
-import KupAutoSklep.demo.model.CarManufacturer;
+import KupAutoSklep.demo.domain.model.BodyStyle;
+import KupAutoSklep.demo.domain.model.CarManufacturer;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 

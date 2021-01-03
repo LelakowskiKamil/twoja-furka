@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>Edit offer</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://igoradamenko.github.io/awsm.css/css/awsm.min.css">
+</head>
+<body>
+<section layout:fragment="content">
+    <h1>Edit offer</h1>
+    <form action="/newoffer" method="POST" class="form-horizontal" th:object="${offer}" >
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Tytuł:</label>
+            <div class="col-sm-10" th:classappend="${#fields.hasErrors('*{title}')?'has-error':''}">
+                <input type="text" class="form-control" th:field="*{title}"/>
+                <div class="error-message" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Rocznik:</label>
+            <div class="col-sm-4" th:classappend="${#fields.hasErrors('*{year}')?'has-error':''}">
+                <input type="number" class="form-control" th:field="*{year}" />
+                <div class="error-message" th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></div>
+            </div>
+            <label class="col-sm-2 control-label">Przebieg:</label>
+            <div class="col-sm-4" th:classappend="${#fields.hasErrors('*{mileage}')?'has-error':''}">
+                <input type="number" class="form-control" th:field="*{mileage}"/>
+                <div class="error-message" th:if="${#fields.hasErrors('mileage')}" th:errors="*{mileage}"></div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Pojemność silnika:</label>
+            <div class="col-sm-4" th:classappend="${#fields.hasErrors('*{engineSize}')?'has-error':''}">
+                <input type="number" step="0.1" class="form-control" th:field="*{engineSize}"/>
+                <div class="error-message" th:if="${#fields.hasErrors('engineSize')}" th:errors="*{engineSize}"></div>
+            </div>
+            <label class="col-sm-2 control-label">Moc silnika:</label>
+            <div class="col-sm-4" th:classappend="${#fields.hasErrors('*{enginePower}')?'has-error':''}">
+                <input type="number" class="form-control" th:field="*{enginePower}"/>
+                <div class="error-message" th:if="${#fields.hasErrors('enginePower')}" th:errors="*{enginePower}"></div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Liczba drzwi:</label>
+            <div class="col-sm-4" th:classappend="${#fields.hasErrors('*{doors}')?'has-error':''}">
+                <input type="number" class="form-control" th:field="*{doors}"/>
+                <div class="error-message" th:if="${#fields.hasErrors('doors')}" th:errors="*{doors}"></div>
+            </div>
+            <label class="col-sm-2 control-label">Kolor:</label>
+            <div class="col-sm-4" th:classappend="${#fields.hasErrors('*{colour}')?'has-error':''}">
+                <input type="text" class="form-control" th:field="*{colour}"/>
+                <div class="error-message" th:if="${#fields.hasErrors('colour')}" th:errors="*{colour}"></div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Model:</label>
+            <div class="col-sm-10" th:classappend="${#fields.hasErrors('*{model.id}')?'has-error':''}">
+                <select class="form-control" th:field="*{model.id}">
+                    <option th:each="m : ${carModels}" th:value="${m.id}" th:text="${m.name}"></option>
+                </select>
+            </div>
+        </div>
+<!--        <div class="form-group" th:object="${carManufacturer}">-->
+<!--            <label class="col-sm-2 control-label">Marka:</label>-->
+<!--            <div class="col-sm-9">-->
+<!--                <select class="form-control" th:field="*{id}">-->
+<!--                    <option th:each="m : ${carManufacturers}" th:value="${m.id}" th:text="${m.name}"></option>-->
+<!--                </select>-->
+<!--            </div>-->
+<!--        </div>-->
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Nadwozie:</label>
+            <div class="col-sm-4" th:classappend="${#fields.hasErrors('*{bodyStyle.id}')?'has-error':''}">
+                <select class="form-control" th:field="*{bodyStyle.id}" >
+                    <option th:each="bs : ${bodyStyles}" th:value="${bs.id}" th:text="${bs.name}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Rodzaj paliwa:</label>
+            <div class="col-sm-4" th:classappend="${#fields.hasErrors('*{fuelType.id}')?'has-error':''}">
+                <select class="form-control" th:field="*{fuelType.id}">
+                    <option th:each="ft : ${fuelTypes}" th:value="${ft.id}" th:text="${ft.name}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Cena:</label>
+            <div class="col-sm-4" th:classappend="${#fields.hasErrors('*{price}')?'has-error':''}">
+                <input type="number" class="form-control" th:field="*{price}"/>
+                <div class="error-message" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Opis:</label>
+            <div class="col-sm-10" th:classappend="${#fields.hasErrors('*{description}')?'has-error':''}">
+                <textarea class="form-control" rows="5" th:field="*{description}"/>
+                <div class="error-message" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+                <input type="hidden" th:field="*{id}" />
+                <input type="submit" value="Zapisz" class="form-control btn btn-primary"/>
+            </div>
+            <div class="col-sm-4">
+                <a href="/" class="btn btn-default">Anuluj</a>
+            </div>
+        </div>
+    </form>
+</section>
+</body>
+</html>
