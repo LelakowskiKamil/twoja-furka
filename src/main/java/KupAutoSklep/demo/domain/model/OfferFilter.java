@@ -8,12 +8,11 @@ public class OfferFilter {
     private Integer page;
     private String sortBy;
     private String order;
+    private Integer pageSize;
 
     public String getSortBy() {
         return sortBy;
     }
-
-
 
     public void setSortBy(String sortBy) {
         this.sortBy = sortBy;
@@ -65,5 +64,13 @@ public class OfferFilter {
 
     public void setToYear(Integer toYear) {
         this.toYear = toYear;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
     }
 }

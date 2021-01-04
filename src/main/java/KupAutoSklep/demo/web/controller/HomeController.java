@@ -1,25 +1,31 @@
 package KupAutoSklep.demo.web.controller;
 
-import KupAutoSklep.demo.model.*;
+import KupAutoSklep.demo.domain.model.*;
+import KupAutoSklep.demo.service.CarModelService;
 import KupAutoSklep.demo.service.OffersService;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Controller(value = "/")
 public class HomeController {
 
-    private OffersService offersService;
+    private final OffersService offersService;
+    private final CarModelService carModelService;
 
-    public HomeController(OffersService offersService) {
+    public HomeController(OffersService offersService, CarModelService carModelService) {
         this.offersService = offersService;
+        this.carModelService = carModelService;
     }
 
 
@@ -70,13 +76,10 @@ public class HomeController {
     public String offersPage(
             Model model,
             OfferFilter offerFilter,
-            @RequestParam("page") Optional<Integer> page,
-            @RequestParam("size") Optional<Integer> size) {
-        int currentPage = page.orElse(1);
-        int pageSize = size.orElse(4);
+            @RequestParam("page") Optional<Integer> page) {
+        int pageValue = page.orElse(1);
+        Page<Offer> offersPage = offersService.pageOffer(pageValue, offerFilter);
 
-
-        Page<Offer> offersPage = offersService.paginateOffers(PageRequest.of(currentPage - 1, pageSize),offerFilter);
 
         model.addAttribute("offers", offersPage);
         int totalPages = offersPage.getTotalPages();
@@ -94,15 +97,17 @@ public class HomeController {
 
         List<String> attributes = Arrays.asList("title", "year", "mileage", "engineSize", "enginePower", "doors", "colour", "price", "model", "bodyStyle", "fuelType");
         List<String> orders = Arrays.asList("low to high", "high to low");
+        List<Integer> pageSizeValues = Arrays.asList(1,2,4);
         model.addAttribute("attributes", attributes);
         model.addAttribute("orders", orders);
         model.addAttribute("carManufacturers", carManufacturers);
+        model.addAttribute("pageSizeValues", pageSizeValues);
         return "offersList";
     }
 
     @GetMapping("/newoffer")
     public String newOfferForm(Offer offer, CarManufacturer carManufacturer, OfferFilter offerFilter, Model model) {
-        List<CarModel> carModels = offersService.getCarModels();
+        List<CarModel> carModels = carModelService.getCarModels();
         List<BodyStyle> bodyStyles = offersService.getBodyStyles();
         List<FuelType> fuelTypes = offersService.getFuelTypes();
 
@@ -115,7 +120,7 @@ public class HomeController {
     @PostMapping("/newoffer")
     public String saveNewOffer(@Valid Offer offer, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            List<CarModel> carModels = offersService.getCarModels();
+            List<CarModel> carModels = carModelService.getCarModels();
             List<BodyStyle> bodyStyles = offersService.getBodyStyles();
             List<FuelType> fuelTypes = offersService.getFuelTypes();
 
@@ -140,7 +145,7 @@ public class HomeController {
     @RequestMapping("/editoffer/{id}")
     public String editOffer(Model model, @PathVariable("id") Integer id) {
         Offer offer = offersService.getOffer(id);
-        List<CarModel> carModels = offersService.getCarModels();
+        List<CarModel> carModels = carModelService.getCarModels();
         List<BodyStyle> bodyStyles = offersService.getBodyStyles();
         List<FuelType> fuelTypes = offersService.getFuelTypes();
 
@@ -159,7 +164,7 @@ public class HomeController {
             model.addAttribute("header", "Edycja ogłoszenia");
             model.addAttribute("action", "/editoffer/" + id);
 
-            List<CarModel> carModels = offersService.getCarModels();
+            List<CarModel> carModels = carModelService.getCarModels();
             List<BodyStyle> bodyStyles = offersService.getBodyStyles();
             List<FuelType> fuelTypes = offersService.getFuelTypes();
 
