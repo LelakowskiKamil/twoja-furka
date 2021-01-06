@@ -6,9 +6,21 @@
     <title>Usuwanie oferty</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://igoradamenko.github.io/awsm.css/css/awsm.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+<!-- create navigation bar ( header) -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <form method="get" action="/">
+                <button type="submit">Wróć do strony głównej</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
 <section layout:fragment="content">
     <h2>Ogłoszenie usunięte</h2>
 
@@ -21,9 +33,6 @@
         <div class="col-sm-8"><span th:text="${offer.title}" /></div>
     </div>
 
-    <p>
-        <a href="/offers">Powrót do listy ofert</a>
-    </p>
 </section>
 </body>
 </html>

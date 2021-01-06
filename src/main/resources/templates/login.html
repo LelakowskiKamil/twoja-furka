@@ -3,11 +3,10 @@
       xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
       layout:decorator="layout">
 <head>
-    <meta charset="ISO-8859-1">
-    <title>Registration and Login App</title>
     <meta charset="UTF-8"/>
+    <title>Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" href="https://igoradamenko.github.io/awsm.css/css/awsm.min.css">
+    <link rel="stylesheet" href="style.css">
 
 </head>
 <body>
@@ -16,62 +15,63 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed"
-                    data-toggle="collapse" data-target="#navbar" aria-expanded="false"
-                    aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span> <span
-                    class="icon-bar"></span> <span class="icon-bar"></span> <span
-                    class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#" th:href="@{/}">Registration and Login Module</a>
+            <form method="get" action="/">
+                <button type="submit">Wróć do strony głównej</button>
+            </form>
         </div>
     </div>
 </nav>
 
 <br>
 <br>
-<div class = "container">
-    <div class = "row">
-        <div class = "col-md-6 col-md-offset-3">
+<div class="container" align="center">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
 
-            <h1> User Login Page </h1>
+            <h1> Logowanie: </h1>
             <form th:action="@{/login}" method="post">
 
                 <!-- error message -->
                 <div th:if="${param.error}">
-                    <div class="alert alert-danger">Invalid username or
-                        password.</div>
+                    <div class="alert alert-danger">Zła nazwa użytkownika lub hasło.</div>
                 </div>
 
                 <!-- logout message -->
                 <div th:if="${param.logout}">
-                    <div class="alert alert-info">You have been logged out.</div>
+                    <div class="alert alert-info">Zalogowano!.</div>
                 </div>
 
-                <div class = "form-group">
-                    <label for ="username"> Username </label> :
-                    <input type="text" class = "form-control" id ="username" name = "username"
-                           placeholder="Enter Email ID" autofocus="autofocus">
-                </div>
+                <div class="form-group" style="display: inline-block">
+                    <div class="container">
+                        <label for="username" style="alignment: left"> Username: </label>
+                    </div>
+                    <div class="container">
+                        <input type="text" class="form-control" id="username" name="username"
+                               placeholder="Enter Email ID" autofocus="autofocus" style="alignment: right">
+                    </div>
 
-                <div class="form-group">
-                    <label for="password">Password</label>: <input type="password"
-                                                                   id="password" name="password" class="form-control"
-                                                                   placeholder="Enter Password" />
-                </div>
 
+                <div class="form-group" style="display: inline-block">
+                    <div class="container">
+                        <label for="password" style="alignment: left">Password:</label>
+                    </div>
+                    <div class="container">
+                        <input type="password" id="password" name="password" class="form-control"
+                               placeholder="Enter Password" style="alignment: right"/>
+                    </div>
+                </div>
+                </div>
                 <div class="form-group">
                     <div class="row">
                         <div class="col-sm-6 col-sm-offset-3">
                             <input type="submit" name="login-submit" id="login-submit"
-                                   class="form-control btn btn-primary" value="Log In" />
+                                   class="form-control btn btn-primary" value="Zaloguj"/>
                         </div>
                     </div>
                 </div>
             </form>
             <div class="form-group">
-						<span>New user? <a href="/" th:href="@{/registration}">Register
-								here</a></span>
+                <span>Nie masz konta? <a href="/" th:href="@{/registration}">Zarejestruj się</a></span>
             </div>
         </div>
     </div>
