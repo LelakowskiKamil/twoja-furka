@@ -14,6 +14,13 @@ public class CarManufacturer {
     @Column(name = "name")
     private String name;
 
+    public CarManufacturer(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public CarManufacturer() {
+    }
     public Integer getId() {
         return id;
     }

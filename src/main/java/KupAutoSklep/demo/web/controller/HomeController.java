@@ -75,10 +75,9 @@ public class HomeController {
     @GetMapping("/offers")
     public String offersPage(
             Model model,
-            OfferFilter offerFilter,
-            @RequestParam("page") Optional<Integer> page) {
-        int pageValue = page.orElse(1);
-        Page<Offer> offersPage = offersService.pageOffer(pageValue, offerFilter);
+            OfferFilter offerFilter) {
+
+        Page<Offer> offersPage = offersService.paginateOffers(offerFilter);
 
 
         model.addAttribute("offers", offersPage);

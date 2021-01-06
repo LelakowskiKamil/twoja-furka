@@ -44,7 +44,6 @@ public class OffersService {
     }
 
 
-
     public List<CarManufacturer> getCarManufacturers() {
         return carManufacturerRepository.findAll();
     }
@@ -56,7 +55,6 @@ public class OffersService {
     public List<FuelType> getFuelTypes() {
         return fuelTypeRepository.findAll();
     }
-
 
 
     public List<Offer> filterByYearFrom(List<Offer> offers, int yearFrom) {
@@ -102,18 +100,26 @@ public class OffersService {
         return offersToFilter;
 
     }
-public Page<Offer> pageOffer(int pageVal, OfferFilter offerFilter){
-        Pageable pageable = PageRequest.of(pageVal-1, 4);
-        return paginateOffers(pageable,offerFilter);
+//public Page<Offer> pageOffer(int pageVal, OfferFilter offerFilter){
+//
+//        return paginateOffers(pageable,offerFilter);
+//
+//}
 
-}
+    public Page<Offer> paginateOffers(OfferFilter offerFilter) {
+        int page;
+        if (offerFilter.getPage() == null) {
+            page = 0;
+        } else {
+            page = offerFilter.getPage() - 1;
+        }
 
-    public Page<Offer> paginateOffers(Pageable pageable, OfferFilter offerFilter) {
+        Pageable pageable = PageRequest.of(page, 4);
         int pageSize;
-        if (offerFilter.getPageSize()==null || offerFilter.getPageSize().equals("") ){
-            pageSize=pageable.getPageSize();
-        }else {
-            pageSize= offerFilter.getPageSize();
+        if (offerFilter.getPageSize() == null) {
+            pageSize = pageable.getPageSize();
+        } else {
+            pageSize = offerFilter.getPageSize();
             offerFilter.setPageSize(pageSize);
 
         }
@@ -133,9 +139,7 @@ public Page<Offer> pageOffer(int pageVal, OfferFilter offerFilter){
             int toIndex = Math.min(startItem + pageSize, offers.size());
             list = offers.subList(startItem, toIndex);
         }
-        Page<Offer> offerPage
-                = new PageImpl<>(list, PageRequest.of(currentPage, pageSize), offers.size());
-        return offerPage;
+        return new PageImpl<>(list, PageRequest.of(currentPage, pageSize), offers.size());
     }
 
     public List<Offer> getOffers() {
@@ -148,33 +152,31 @@ public Page<Offer> pageOffer(int pageVal, OfferFilter offerFilter){
         String sort;
         String order;
         if (offerFilter.getSortBy() == null || offerFilter.getSortBy().equals("")) {
-          sort = "price";
-        }else{
+            sort = "price";
+        } else {
             sort = offerFilter.getSortBy();
             offerFilter.setSortBy(sort);
         }
 
         if (offerFilter.getOrder() == null || offerFilter.getOrder().equals("")) {
             order = "ASC";
-        }else{
-            if (offerFilter.getOrder().equals("low to high")){
+        } else {
+            if (offerFilter.getOrder().equals("low to high")) {
                 order = "ASC";
                 offerFilter.setOrder("low to high");
-            }else {
+            } else {
                 order = "DESC";
                 offerFilter.setOrder("high to low");
             }
         }
 
-        return offerRepository.findAll(Sort.by(Sort.Direction.fromString(order),sort));
+        return offerRepository.findAll(Sort.by(Sort.Direction.fromString(order), sort));
     }
 
 
     public Offer getOffer(int offerId) {
         return offerRepository.findById(offerId);
     }
-
-
 
 
     public Offer createOffer(Offer offer) {
