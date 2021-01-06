@@ -28,14 +28,12 @@ public class OffersService {
                          CarManufacturerRepository carManufacturerRepository) {
         this.em = em;
         this.offerRepository = offerRepository;
-        this.carModelRepository = carModelRepository;
         this.fuelTypeRepository = fuelTypeRepository;
         this.bodyStyleRepository = bodyStyleRepository;
         this.carManufacturerRepository = carManufacturerRepository;
     }
 
     private final OfferRepository offerRepository;
-    private final CarModelRepository carModelRepository;
     private final FuelTypeRepository fuelTypeRepository;
     private final BodyStyleRepository bodyStyleRepository;
     private final CarManufacturerRepository carManufacturerRepository;
@@ -45,9 +43,6 @@ public class OffersService {
         return em.find(CarManufacturer.class, id);
     }
 
-    public CarModel getCarModel(int id) {
-        return em.find(CarModel.class, id);
-    }
 
     public List<CarManufacturer> getCarManufacturers() {
         return carManufacturerRepository.findAll();
@@ -59,10 +54,6 @@ public class OffersService {
 
     public List<FuelType> getFuelTypes() {
         return fuelTypeRepository.findAll();
-    }
-
-    public List<CarModel> getCarModels() {
-        return carModelRepository.findAll();
     }
 
 
@@ -109,10 +100,29 @@ public class OffersService {
         return offersToFilter;
 
     }
+//public Page<Offer> pageOffer(int pageVal, OfferFilter offerFilter){
+//
+//        return paginateOffers(pageable,offerFilter);
+//
+//}
 
+    public Page<Offer> paginateOffers(OfferFilter offerFilter) {
+        int page;
+        if (offerFilter.getPage() == null) {
+            page = 0;
+        } else {
+            page = offerFilter.getPage() - 1;
+        }
 
-    public Page<Offer> paginateOffers(Pageable pageable, OfferFilter offerFilter) {
-        int pageSize = pageable.getPageSize();
+        Pageable pageable = PageRequest.of(page, 4);
+        int pageSize;
+        if (offerFilter.getPageSize() == null) {
+            pageSize = pageable.getPageSize();
+        } else {
+            pageSize = offerFilter.getPageSize();
+            offerFilter.setPageSize(pageSize);
+
+        }
         int currentPage = pageable.getPageNumber();
         int startItem = currentPage * pageSize;
         List<Offer> list;
@@ -129,12 +139,7 @@ public class OffersService {
             int toIndex = Math.min(startItem + pageSize, offers.size());
             list = offers.subList(startItem, toIndex);
         }
-        Page<Offer> offerPage
-                = new PageImpl<>(list, PageRequest.of(currentPage, pageSize), offers.size());
-        System.out.println(offerPage.toString());
-        System.out.println(offerPage.getTotalPages());
-        System.out.println(offerPage.getTotalElements());
-        return offerPage;
+        return new PageImpl<>(list, PageRequest.of(currentPage, pageSize), offers.size());
     }
 
     public List<Offer> getOffers() {
@@ -147,25 +152,25 @@ public class OffersService {
         String sort;
         String order;
         if (offerFilter.getSortBy() == null || offerFilter.getSortBy().equals("")) {
-          sort = "price";
-        }else{
+            sort = "price";
+        } else {
             sort = offerFilter.getSortBy();
             offerFilter.setSortBy(sort);
         }
 
         if (offerFilter.getOrder() == null || offerFilter.getOrder().equals("")) {
             order = "ASC";
-        }else{
-            if (offerFilter.getOrder().equals("low to high")){
+        } else {
+            if (offerFilter.getOrder().equals("low to high")) {
                 order = "ASC";
                 offerFilter.setOrder("low to high");
-            }else {
+            } else {
                 order = "DESC";
                 offerFilter.setOrder("high to low");
             }
         }
 
-        return offerRepository.findAll(Sort.by(Sort.Direction.fromString(order),sort));
+        return offerRepository.findAll(Sort.by(Sort.Direction.fromString(order), sort));
     }
 
 
@@ -173,11 +178,6 @@ public class OffersService {
         return offerRepository.findById(offerId);
     }
 
-
-    public List<CarModel> getCarModelByManufacturer(int manufacturerId) {
-
-        return carModelRepository.findCarModelsByManufacturer_Id(manufacturerId);
-    }
 
     public Offer createOffer(Offer offer) {
         em.persist(offer);

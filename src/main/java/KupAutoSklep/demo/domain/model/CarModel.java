@@ -22,6 +22,16 @@ public class CarModel {
     @OneToMany(mappedBy = "model")
     private List<Offer> offers;
 
+    public CarModel(Integer id, String name, CarManufacturer manufacturer, List<Offer> offers) {
+        this.id = id;
+        this.name = name;
+        this.manufacturer = manufacturer;
+        this.offers = offers;
+    }
+
+    public CarModel() {
+
+    }
     public CarManufacturer getManufacturer() {
         return manufacturer;
     }

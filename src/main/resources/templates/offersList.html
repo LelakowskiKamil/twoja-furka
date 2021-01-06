@@ -34,12 +34,16 @@
                     <option value="">Order:</option>
                     <option th:each="order : ${orders}" th:value="${order}" th:text="${order}"></option>
                 </select>
+                <select class="form-control" th:field="*{pageSize}">
+                    <option value="">Offers per page:</option>
+                    <option th:each="size : ${pageSizeValues}" th:value="${size}" th:text="${size}"></option>
+                </select>
 
 
                 <input type="submit" value="Filtruj" class="form-control"/>
                 <div th:if="${offers.totalPages > 0}" class="pagination"
                      th:each="pageNumber : ${pageNumbers}">
-                    <a th:href="@{/offers(manufacturerId=*{manufacturerId}, modelId=*{modelId}, fromYear=*{fromYear}, toYear=*{toYear}, sortBy=*{sortBy}, order=*{order}, size=${offers.size}, page=${pageNumber}  )}"
+                    <a th:href="@{/offers(manufacturerId=*{manufacturerId}, modelId=*{modelId}, fromYear=*{fromYear}, toYear=*{toYear}, sortBy=*{sortBy}, order=*{order}, pageSize=*{pageSize}, page=${pageNumber}  )}"
                        th:text=${pageNumber}
                        th:class="${pageNumber==offers.number + 1} ? active"></a>
                 </div>

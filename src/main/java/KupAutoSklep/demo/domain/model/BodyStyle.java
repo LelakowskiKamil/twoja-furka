@@ -18,6 +18,15 @@ public class BodyStyle {
     @OneToMany(mappedBy = "bodyStyle") //nazwa taka jak tabela
     private List<Offer> offers;
 
+    public BodyStyle() {
+    }
+
+    public BodyStyle(Integer id, String name, List<Offer> offers) {
+        this.id = id;
+        this.name = name;
+        this.offers = offers;
+    }
+
     public String getName() {
         return name;
     }

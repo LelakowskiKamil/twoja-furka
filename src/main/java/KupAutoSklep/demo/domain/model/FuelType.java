@@ -18,6 +18,15 @@ public class FuelType {
     @OneToMany(mappedBy = "fuelType")
     private List<Offer> offers;
 
+    public FuelType(Integer id, String name, List<Offer> offers) {
+        this.id = id;
+        this.name = name;
+        this.offers = offers;
+    }
+
+    public FuelType() {
+    }
+
     public String getName() {
         return name;
     }

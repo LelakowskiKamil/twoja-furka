@@ -78,6 +78,27 @@ public class Offer {
     @ManyToOne
     private FuelType fuelType;
 
+
+    public Offer(Integer id, @NotNull @Size(max = 255, min = 5) String title, @NotNull @Min(1900) Integer year, @NotNull @Min(0) Integer mileage, @Min(0) @Max(100) BigDecimal engineSize, @Min(0) Integer enginePower, @NotNull @Min(1) @Max(5) Integer doors, @NotNull @Size(max = 30, min = 3) String colour, @NotNull @Size(max = 65535, min = 5) String description, @NotNull @Min(0) Integer price, @NotNull CarModel model, @NotNull BodyStyle bodyStyle, @NotNull FuelType fuelType) {
+        this.id = id;
+        this.title = title;
+        this.year = year;
+        this.mileage = mileage;
+        this.engineSize = engineSize;
+        this.enginePower = enginePower;
+        this.doors = doors;
+        this.colour = colour;
+        this.description = description;
+        this.price = price;
+        this.model = model;
+        this.bodyStyle = bodyStyle;
+        this.fuelType = fuelType;
+    }
+
+    public Offer() {
+
+    }
+
     public Integer getId() {
         return id;
     }
@@ -180,5 +201,14 @@ public class Offer {
 
     public void setFuelType(FuelType fuelType) {
         this.fuelType = fuelType;
+    }
+
+    @Override
+    public String toString() {
+        return "Offer{" +
+                "year=" + year +
+                ", price=" + price +
+                ", model=" + model +
+                '}';
     }
 }
