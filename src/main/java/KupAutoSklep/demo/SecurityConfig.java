@@ -41,10 +41,6 @@ public DaoAuthenticationProvider daoAuthenticationProvider(){
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(daoAuthenticationProvider());
-        auth.inMemoryAuthentication()
-                .withUser("admin")
-                .password(passwordEncoder().encode("admin"))
-                .roles("ADMIN");
     }
 
     @Override
@@ -53,12 +49,8 @@ public DaoAuthenticationProvider daoAuthenticationProvider(){
         http.authorizeRequests()
                 .antMatchers("/newoffer")
                 .hasRole("USER")
-                .antMatchers("/newoffer")
-                .hasRole("ADMIN")
                 .antMatchers("/newoffer/*")
                 .hasRole("USER")
-                .antMatchers("/newoffer/*")
-                .hasRole("ADMIN")
                 .antMatchers("/editoffer/*")
                 .hasRole("ADMIN")
                 .antMatchers("/deleteoffer/*")
