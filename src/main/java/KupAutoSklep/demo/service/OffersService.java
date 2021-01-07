@@ -156,7 +156,6 @@ public class OffersService {
         } else {
             sort = offerFilter.getSortBy();
             offerFilter.setSortBy(sort);
-
         }
 
         if (offerFilter.getOrder() == null || offerFilter.getOrder().equals("")) {
