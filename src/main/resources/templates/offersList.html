@@ -6,60 +6,80 @@
     <title>Lista ofert</title>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" href="https://igoradamenko.github.io/awsm.css/css/awsm.min.css">
-
+    <link rel="stylesheet" href="style.css">
+    <style>
+        td {
+            border: 1px solid black;
+        }
+    </style>
 </head>
 <body>
+
+<!-- create navigation bar ( header) -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <form method="get" action="/">
+                <button type="submit">Wróć do strony głównej</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
 <section layout:fragment="content">
     <div id="offerFilter" class="panel panel-default">
-        <div class="panel-heading">Szukaj ofert</div>
-        <div class="panel-body">
-            <form id="offerFilterForm" action="/offers" method="get" class="form-inline" th:object="${offerFilter}">
-                <select class="form-control" th:field="*{manufacturerId}">
+        <div class="panel-heading" align="center"><p style="font-size:32px;font-weight: bold">Szukaj ofert</p></div>
+        <div class="panel-body" align="center">
+            <form id="offerFilterForm" action="/offers" method="get" class="form-inline" th:object="${offerFilter}" style="font-size:100%;font-weight: normal">
+                <select class="form-control" th:field="*{manufacturerId}" style="font-size:100%;font-weight: normal">
                     <option value="">Marka</option>
                     <option th:each="manufacturer : ${carManufacturers}" th:value="${manufacturer.id}"
                             th:text="${manufacturer.name}"></option>
                 </select>
-                <select class="form-control" th:field="*{modelId}">
+                <select class="form-control" th:field="*{modelId}" style="font-size:100%;font-weight: normal">
                     <option value="">Model</option>
                     <option th:each="model : ${carModels}" th:value="${model.id}" th:text="${model.name}"></option>
                 </select>
-                <input type="number" class="form-control" th:field="*{fromYear}"/>
-                <input type="number" class="form-control" th:field="*{toYear}"/>
-                <select class="form-control" th:field="*{sortBy}">
+                <input type="number" class="form-control" th:field="*{fromYear}" style="font-size:85%;font-weight: normal; padding-top:1px"/>
+                <input type="number" class="form-control" th:field="*{toYear}" style="font-size:85%;font-weight: normal; padding-top:1px"/>
+                <select class="form-control" th:field="*{sortBy}" style="font-size:100%;font-weight: normal">
                     <option value="">Sort by:</option>
                     <option th:each="attribute : ${attributes}" th:value="${attribute}" th:text="${attribute}"></option>
                 </select>
-                <select class="form-control" th:field="*{order}">
+                <select class="form-control" th:field="*{order}" style="font-size:100%;font-weight: normal">
                     <option value="">Order:</option>
                     <option th:each="order : ${orders}" th:value="${order}" th:text="${order}"></option>
                 </select>
-                <select class="form-control" th:field="*{pageSize}">
+                <select class="form-control" th:field="*{pageSize}" style="font-size:100%;font-weight: normal">
                     <option value="">Offers per page:</option>
                     <option th:each="size : ${pageSizeValues}" th:value="${size}" th:text="${size}"></option>
                 </select>
 
 
-                <input type="submit" value="Filtruj" class="form-control"/>
+                <input type="submit" value="Filtruj" class="form-control" style="font-size:100%;font-weight: normal"/>
+                <br>
                 <div th:if="${offers.totalPages > 0}" class="pagination"
-                     th:each="pageNumber : ${pageNumbers}">
+                     th:each="pageNumber : ${pageNumbers}" style="display: inline-flex">
                     <a th:href="@{/offers(manufacturerId=*{manufacturerId}, modelId=*{modelId}, fromYear=*{fromYear}, toYear=*{toYear}, sortBy=*{sortBy}, order=*{order}, pageSize=*{pageSize}, page=${pageNumber}  )}"
                        th:text=${pageNumber}
                        th:class="${pageNumber==offers.number + 1} ? active"></a>
+
                 </div>
             </form>
 
         </div>
     </div>
-
-    <table class="table">
+    <br>
+    <br>
+    <table class="table" style="margin-left: auto;margin-right: auto">
         <tr>
-            <th>Tytuł</th>
-            <th>Marka</th>
-            <th>Model</th>
-            <th>Rocznik</th>
-            <th>Cena</th>
-            <th></th>
+            <th style="width: 220px">Tytuł</th>
+            <th style="width: 100px">Marka</th>
+            <th style="width: 100px">Model</th>
+            <th style="width: 100px">Rocznik</th>
+            <th style="width: 100px">Cena</th>
+            <th style="width: 100px"></th>
         </tr>
         <tr th:each="offer : ${offers}">
             <td th:text="${offer.title}"></td>

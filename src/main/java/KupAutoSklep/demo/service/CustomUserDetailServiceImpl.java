@@ -1,5 +1,6 @@
 package KupAutoSklep.demo.service;
 
+import KupAutoSklep.demo.UserDisplayDetails;
 import KupAutoSklep.demo.domain.repository.UserRepository;
 import KupAutoSklep.demo.domain.model.login.Role;
 import KupAutoSklep.demo.domain.model.login.User;
@@ -35,4 +36,6 @@ private final UserRepository userRepository;
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
     }
+
+
 }

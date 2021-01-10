@@ -13,14 +13,17 @@ public class CreateUserCommand {
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$")
     private String password;
 
+private boolean isEnabled;
+
     public CreateUserCommand(){
 
     };
 
-    public CreateUserCommand(String email, String username, String password) {
+    public CreateUserCommand(String email, String username, String password, boolean isEnabled) {
         this.email = email;
         this.username = username;
         this.password = password;
+        this.isEnabled = isEnabled;
     }
 
     public String getEmail() {
@@ -45,5 +48,13 @@ public class CreateUserCommand {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
     }
 }

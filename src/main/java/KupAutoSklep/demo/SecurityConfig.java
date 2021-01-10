@@ -1,12 +1,14 @@
 package KupAutoSklep.demo;
 
+import KupAutoSklep.demo.domain.model.login.User;
+import KupAutoSklep.demo.domain.repository.UserRepository;
 import KupAutoSklep.demo.service.CustomUserDetailService;
+import KupAutoSklep.demo.service.UserDisplayDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -18,8 +20,10 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CustomUserDetailService customUserDetailService;
-    public SecurityConfig(CustomUserDetailService customUserDetailService) {
+    private final UserRepository userRepository;
+    public SecurityConfig(CustomUserDetailService customUserDetailService, UserRepository userRepository) {
         this.customUserDetailService = customUserDetailService;
+        this.userRepository = userRepository;
     }
 
 
@@ -41,6 +45,10 @@ public DaoAuthenticationProvider daoAuthenticationProvider(){
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(daoAuthenticationProvider());
+        auth.inMemoryAuthentication()
+                .withUser("admin")
+                .password(passwordEncoder().encode("admin"))
+                .roles("ADMIN");
     }
 
     @Override
@@ -49,8 +57,12 @@ public DaoAuthenticationProvider daoAuthenticationProvider(){
         http.authorizeRequests()
                 .antMatchers("/newoffer")
                 .hasRole("USER")
+                .antMatchers("/newoffer")
+                .hasRole("ADMIN")
                 .antMatchers("/newoffer/*")
                 .hasRole("USER")
+                .antMatchers("/newoffer/*")
+                .hasRole("ADMIN")
                 .antMatchers("/editoffer/*")
                 .hasRole("ADMIN")
                 .antMatchers("/deleteoffer/*")
@@ -69,5 +81,9 @@ public DaoAuthenticationProvider daoAuthenticationProvider(){
         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
         .logoutSuccessUrl("/login?logout");
 
+    }
+
+    public User findByEmailAddress(String emailAddress){
+        return userRepository.findByEmail(emailAddress);
     }
 }

@@ -1,9 +1,10 @@
 package KupAutoSklep.demo.web.controller;
 
+import KupAutoSklep.demo.exception.UserEmailAlreadyExistException;
+import KupAutoSklep.demo.exception.UserNameAlreadyExistException;
 import KupAutoSklep.demo.service.UserService;
 import KupAutoSklep.demo.web.command.CreateUserCommand;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -38,11 +39,21 @@ public class UserRegistrationController {
                                       BindingResult bindings) {
         if (bindings.hasErrors()) {
             return "/registration";
-        } else {
-
         }
-        userService.save(createUserCommand);
-        return "redirect:/registration?success";
+        try{
+            userService.save(createUserCommand);
+            return "redirect:/registration?success";
+        }catch (UserEmailAlreadyExistException uae){
+            bindings.rejectValue("email",null, "User with this e-mail already exist");
+            return "/registration";
+        }catch (UserNameAlreadyExistException uae){
+            bindings.rejectValue("username",null, "User with this username already exist");
+            return "/registration";
+        }catch (RuntimeException re){
+            bindings.rejectValue(null,null, "Error");
+            return "/registration";
+        }
+
     }
 
 }
