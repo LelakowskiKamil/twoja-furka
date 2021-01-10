@@ -1,9 +1,8 @@
 package KupAutoSklep.demo;
 
 import KupAutoSklep.demo.domain.model.login.User;
-import KupAutoSklep.demo.domain.repository.UserRepository;
+import KupAutoSklep.demo.domain.repository.SqlUserRepository;
 import KupAutoSklep.demo.service.CustomUserDetailService;
-import KupAutoSklep.demo.service.UserDisplayDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -20,10 +19,10 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CustomUserDetailService customUserDetailService;
-    private final UserRepository userRepository;
-    public SecurityConfig(CustomUserDetailService customUserDetailService, UserRepository userRepository) {
+    private final SqlUserRepository sqlUserRepository;
+    public SecurityConfig(CustomUserDetailService customUserDetailService, SqlUserRepository sqlUserRepository) {
         this.customUserDetailService = customUserDetailService;
-        this.userRepository = userRepository;
+        this.sqlUserRepository = sqlUserRepository;
     }
 
 
@@ -84,6 +83,6 @@ public DaoAuthenticationProvider daoAuthenticationProvider(){
     }
 
     public User findByEmailAddress(String emailAddress){
-        return userRepository.findByEmail(emailAddress);
+        return sqlUserRepository.findByEmail(emailAddress);
     }
 }

@@ -1,6 +1,6 @@
 package KupAutoSklep.demo.service;
 
-import KupAutoSklep.demo.domain.repository.UserRepository;
+import KupAutoSklep.demo.domain.repository.SqlUserRepository;
 import KupAutoSklep.demo.converter.UserConverter;
 import KupAutoSklep.demo.domain.model.login.Role;
 import KupAutoSklep.demo.domain.model.login.User;
@@ -21,12 +21,12 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
+    private final SqlUserRepository sqlUserRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserConverter userConverter;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, UserConverter userConverter) {
-        this.userRepository = userRepository;
+    public UserServiceImpl(SqlUserRepository sqlUserRepository, PasswordEncoder passwordEncoder, UserConverter userConverter) {
+        this.sqlUserRepository = sqlUserRepository;
         this.passwordEncoder = passwordEncoder;
         this.userConverter = userConverter;
     }
@@ -36,19 +36,19 @@ public class UserServiceImpl implements UserService {
     //    setEncodedPassword(createUserCommand);
     //    UserSummary userSummary = userConverter.toUserSummary(createUserCommand);
         User user = new User(createUserCommand.getEmail(), createUserCommand.getUsername(), passwordEncoder.encode(createUserCommand.getPassword()), Arrays.asList(new Role("ROLE_USER")), createUserCommand.isEnabled());
-        if (userRepository.existsByEmail(
+        if (sqlUserRepository.existsByEmail(
                 user.getEmail())) {
             throw new UserEmailAlreadyExistException(String.format(
                     "User with %s userEmail already exist in DB",
                     user.getEmail()));
 
-        }else if (userRepository.existsByUsername(
+        }else if (sqlUserRepository.existsByUsername(
                 user.getUsername())) {
             throw new UserNameAlreadyExistException(String.format(
                     "User with %s username already exist in DB",
                     user.getUsername()));
         }
-        return userRepository.save(user);
+        return sqlUserRepository.save(user);
     }
 
 
@@ -56,14 +56,6 @@ public class UserServiceImpl implements UserService {
         userToCreate.setPassword(passwordEncoder.encode(userToCreate.getPassword()));
 
     }
-
-    private Collection<? extends GrantedAuthority>
-    mapRolesToAuthorities(Collection<Role> roles){
-        return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toList());
-    }
-
 
 
 }
