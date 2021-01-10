@@ -34,16 +34,20 @@ public class User {
 
     private Collection<Role> roles;
 
+    private boolean enabled;
+
     public User() {
 
     }
 
-    public User(@NotNull String email, String username, String password, Collection<Role> roles) {
+    public User(@NotNull String email, String username, String password, Collection<Role> roles, boolean enabled) {
         this.email = email;
         this.username = username;
         this.password = password;
         this.roles = roles;
+        this.enabled = enabled;
     }
+
 
     public long getId() {
         return id;
@@ -83,5 +87,13 @@ public class User {
 
     public void setRoles(Collection<Role> roles) {
         this.roles = roles;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

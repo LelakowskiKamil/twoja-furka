@@ -5,11 +5,13 @@ public class UserSummary {
     private String email;
     private String username;
     private String password;
+    private boolean isEnabled;
 
-    public UserSummary(String email, String username, String password) {
+    public UserSummary(String email, String username, String password, boolean isEnabled) {
         this.email = email;
         this.username = username;
         this.password = password;
+        this.isEnabled = isEnabled;
     }
 
     public String getEmail() {
@@ -34,5 +36,13 @@ public class UserSummary {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
     }
 }

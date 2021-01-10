@@ -9,4 +9,6 @@ import org.springframework.stereotype.Service;
 public interface CustomUserDetailService extends UserDetailsService {
     UserDetails loadUserByUsername(String username);
 
+
+
 }

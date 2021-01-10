@@ -1,10 +1,14 @@
 package KupAutoSklep.demo.web.controller;
 
 import KupAutoSklep.demo.domain.model.*;
+import KupAutoSklep.demo.domain.model.login.User;
+import KupAutoSklep.demo.domain.repository.UserRepository;
 import KupAutoSklep.demo.service.CarModelService;
 import KupAutoSklep.demo.service.OffersService;
+import KupAutoSklep.demo.web.command.CreateUserCommand;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -31,6 +34,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String home() {
+
         return "layout";
     }
 
