@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
       layout:decorator="layout">
 <head>
     <title th:text="${offer.title}">Szczegóły oferty</title>
@@ -9,6 +10,8 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<span style="alignment: left">Zalogowany użytkownik: <span>[[${#request.remoteUser}]]</span></span>
+<div sec:authorize="isAuthenticated()"><span style="alignment: right"><a href="/logout">Wyloguj</a></span></div>
 
 <!-- create navigation bar ( header) -->
 <nav class="navbar navbar-inverse navbar-fixed-top">
