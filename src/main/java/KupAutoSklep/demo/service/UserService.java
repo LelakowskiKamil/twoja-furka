@@ -12,4 +12,8 @@ public interface UserService  {
 
     void setEncodedPassword(CreateUserCommand userToCreate);
 
+    User findByUsername(String username);
+
+    User findById(long id);
+
 }

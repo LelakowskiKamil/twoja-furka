@@ -17,4 +17,10 @@ public interface SqlUserRepository extends UserRepository, JpaRepository<User, L
 
     @Override
     boolean existsByUsername(String existsByUsername);
+
+    @Override
+    User save(User user);
+
+    @Override
+    User findById(long id);
 }

@@ -7,7 +7,7 @@
     <title th:text="${offer.title}">Szczegóły oferty</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 <body>
 <span style="alignment: left">Zalogowany użytkownik: <span>[[${#request.remoteUser}]]</span></span>
@@ -24,6 +24,7 @@
     </div>
 </nav>
 <section layout:fragment="content">
+
     <h1 th:text="${offer.title}"></h1>
     <h2>
         Cena:
@@ -63,7 +64,9 @@
     </table>
     <div th:text="${offer.description}" class="well">
     </div>
-    <div>
+<br>
+    <div th:object="${user}">  Ogłoszenie użytkownika:  <a th:href="|/userinfo/${user.id}|" th:text="${offer.user.username}"></a></div>
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
         <a th:href="|/deleteoffer/${offer.id}|" class="btn btn-danger">Usuń ogłoszenie</a>
         <a th:href="|/editoffer/${offer.id}|" class="btn btn-primary">Edytuj ogłoszenie</a>
     </div>

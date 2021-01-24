@@ -1,6 +1,10 @@
 package KupAutoSklep.demo.web.command;
 
+import KupAutoSklep.demo.domain.model.Offer;
+
+import javax.persistence.Column;
 import javax.validation.constraints.*;
+import java.util.List;
 
 public class CreateUserCommand {
 
@@ -13,18 +17,29 @@ public class CreateUserCommand {
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$")
     private String password;
 
-private boolean isEnabled;
+    private String firstname;
+
+    private String lastname;
+
+    private String phone;
+
+
+    private boolean isEnabled;
 
     public CreateUserCommand(){
 
     };
 
-    public CreateUserCommand(String email, String username, String password, boolean isEnabled) {
+    public CreateUserCommand(@Email(message = "This email address is invalid") String email, @Size(max = 30, min = 3) String username, @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$") String password, String firstname, String lastname, String phone, boolean isEnabled) {
         this.email = email;
         this.username = username;
         this.password = password;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.phone = phone;
         this.isEnabled = isEnabled;
     }
+
 
     public String getEmail() {
         return email;
@@ -57,4 +72,5 @@ private boolean isEnabled;
     public void setEnabled(boolean enabled) {
         isEnabled = enabled;
     }
+
 }

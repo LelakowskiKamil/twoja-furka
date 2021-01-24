@@ -1,11 +1,12 @@
 package KupAutoSklep.demo.service;
 
 import KupAutoSklep.demo.domain.model.*;
-import KupAutoSklep.demo.domain.repository.BodyStyleRepository;
-import KupAutoSklep.demo.domain.repository.CarManufacturerRepository;
-import KupAutoSklep.demo.domain.repository.FuelTypeRepository;
-import KupAutoSklep.demo.domain.repository.OfferRepository;
+import KupAutoSklep.demo.domain.model.login.User;
+import KupAutoSklep.demo.domain.repository.*;
+import KupAutoSklep.demo.web.command.CreateOfferCommand;
 import org.springframework.data.domain.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -23,17 +24,19 @@ public class OffersService {
 
     public OffersService(EntityManager em,
                          OfferRepository offerRepository,
-                         FuelTypeRepository fuelTypeRepository,
+                         UserRepository userRepository, FuelTypeRepository fuelTypeRepository,
                          BodyStyleRepository bodyStyleRepository,
                          CarManufacturerRepository carManufacturerRepository) {
         this.em = em;
         this.offerRepository = offerRepository;
+        this.userRepository = userRepository;
         this.fuelTypeRepository = fuelTypeRepository;
         this.bodyStyleRepository = bodyStyleRepository;
         this.carManufacturerRepository = carManufacturerRepository;
     }
 
     private final OfferRepository offerRepository;
+    private final UserRepository userRepository;
     private final FuelTypeRepository fuelTypeRepository;
     private final BodyStyleRepository bodyStyleRepository;
     private final CarManufacturerRepository carManufacturerRepository;
@@ -180,7 +183,8 @@ public class OffersService {
     }
 
 
-    public Offer createOffer(Offer offer) {
+    public Offer createOffer(CreateOfferCommand createOfferCommand) {
+Offer offer = new Offer(createOfferCommand.getTitle(),createOfferCommand.getYear(),createOfferCommand.getMileage(),createOfferCommand.getEngineSize(),createOfferCommand.getEnginePower(),createOfferCommand.getDoors(),createOfferCommand.getColour(),createOfferCommand.getDescription(),createOfferCommand.getPrice(),createOfferCommand.getModel(),createOfferCommand.getBodyStyle(),createOfferCommand.getFuelType(),createOfferCommand.getUser());
         em.persist(offer);
         return offer;
     }

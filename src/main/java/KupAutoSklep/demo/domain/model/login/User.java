@@ -1,8 +1,11 @@
 package KupAutoSklep.demo.domain.model.login;
 
+import KupAutoSklep.demo.domain.model.Offer;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -36,16 +39,29 @@ public class User {
 
     private boolean enabled;
 
+    @OneToMany(mappedBy = "user")
+    private List<Offer> offers;
+
+    @Column(name = "firstname")
+    private String firstname;
+
+    @Column(name = "lastname")
+    private String lastname;
+
+    @Column(name = "phone")
+    private String phone;
+
     public User() {
 
     }
 
-    public User(@NotNull String email, String username, String password, Collection<Role> roles, boolean enabled) {
+    public User(@NotNull String email, String username, String password, Collection<Role> roles, boolean enabled, List<Offer> offers) {
         this.email = email;
         this.username = username;
         this.password = password;
         this.roles = roles;
         this.enabled = enabled;
+        this.offers = offers;
     }
 
 
@@ -95,5 +111,50 @@ public class User {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public List<Offer> getOffers() {
+        return offers;
+    }
+
+    public void setOffers(List<Offer> offers) {
+        this.offers = offers;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                ", enabled=" + enabled +
+                ", offers=" + offers +
+                '}';
     }
 }
