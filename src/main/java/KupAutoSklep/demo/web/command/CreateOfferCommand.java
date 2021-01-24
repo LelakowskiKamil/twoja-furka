@@ -1,92 +1,63 @@
-package KupAutoSklep.demo.domain.model;
+package KupAutoSklep.demo.web.command;
 
+import KupAutoSklep.demo.domain.model.BodyStyle;
+import KupAutoSklep.demo.domain.model.CarModel;
+import KupAutoSklep.demo.domain.model.FuelType;
 import KupAutoSklep.demo.domain.model.login.User;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
-@Entity
-@Table(name = "offer")
-public class Offer {
+public class CreateOfferCommand {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
-
-    @NotNull
     @Size(max = 255, min = 5)
-    @Column(name = "title")
     private String title;
 
-    @NotNull
     @Min(1900)
-    @Column(name = "year")
     private Integer year;
 
-    @NotNull
     @Min(0)
-    @Column(name = "mileage")
     private Integer mileage;
 
 
-    @Column(name = "engine_size")
     @Min(0)
-    @Max(100)
     private BigDecimal engineSize;
 
-    @Column(name = "engine_power")
     @Min(0)
     private Integer enginePower;
 
-    @NotNull
     @Min(1)
     @Max(5)
-    @Column(name = "doors")
     private Integer doors;
 
-    @NotNull
     @Size(max = 30, min = 3)
-    @Column(name = "colour")
     private String colour;
 
-    @NotNull
-    @Lob
     @Size(max = 65535, min = 5)
-    @Column(name = "description")
     private String description;
 
-    @NotNull
     @Min(0)
-    @Column(name = "price")
     private Integer price;
 
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "model_id", referencedColumnName = "id")
     private CarModel model;
 
-    @NotNull
-    @JoinColumn(name = "body_style_id", referencedColumnName = "id")
-    @ManyToOne
     private BodyStyle bodyStyle;
 
-    @NotNull
-    @JoinColumn(name = "fuel_type_id", referencedColumnName = "id")
-    @ManyToOne
     private FuelType fuelType;
 
-    @NotNull
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @ManyToOne
     private User user;
 
+    public CreateOfferCommand() {
+    }
 
-    public Offer(@NotNull @Size(max = 255, min = 5) String title, @NotNull @Min(1900) Integer year, @NotNull @Min(0) Integer mileage, @Min(0) @Max(100) BigDecimal engineSize, @Min(0) Integer enginePower, @NotNull @Min(1) @Max(5) Integer doors, @NotNull @Size(max = 30, min = 3) String colour, @NotNull @Size(max = 65535, min = 5) String description, @NotNull @Min(0) Integer price, @NotNull CarModel model, @NotNull BodyStyle bodyStyle, @NotNull FuelType fuelType,@NotNull User user) {
+    public CreateOfferCommand(@Size(max = 255, min = 5) String title, @Min(1900) Integer year, @Min(0) Integer mileage, @Min(0) BigDecimal engineSize, @Min(0) Integer enginePower, @Min(1) @Max(5) Integer doors, @Size(max = 30, min = 3) String colour, @Size(max = 65535, min = 5) String description, @Min(0) Integer price, CarModel model, BodyStyle bodyStyle, FuelType fuelType, User user) {
         this.title = title;
         this.year = year;
         this.mileage = mileage;
@@ -100,18 +71,6 @@ public class Offer {
         this.bodyStyle = bodyStyle;
         this.fuelType = fuelType;
         this.user = user;
-    }
-
-    public Offer() {
-
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getTitle() {
@@ -216,14 +175,5 @@ public class Offer {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    @Override
-    public String toString() {
-        return "Offer{" +
-                "year=" + year +
-                ", price=" + price +
-                ", model=" + model +
-                '}';
     }
 }

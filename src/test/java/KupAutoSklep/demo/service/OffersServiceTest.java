@@ -1,25 +1,17 @@
 package KupAutoSklep.demo.service;
 
 import KupAutoSklep.demo.domain.model.*;
-import KupAutoSklep.demo.domain.repository.BodyStyleRepository;
-import KupAutoSklep.demo.domain.repository.CarManufacturerRepository;
-import KupAutoSklep.demo.domain.repository.FuelTypeRepository;
-import KupAutoSklep.demo.domain.repository.OfferRepository;
-import org.junit.jupiter.api.Order;
+import KupAutoSklep.demo.domain.model.login.User;
+import KupAutoSklep.demo.domain.repository.*;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import javax.persistence.EntityManager;
 
-import java.awt.print.Pageable;
 import java.math.BigDecimal;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -31,9 +23,10 @@ class OffersServiceTest {
     BodyStyle bodyStyle2 = new BodyStyle(2, "bodyStyle2", List.of());
     FuelType fuelType = new FuelType(1, "fuelType", List.of());
     FuelType fuelType2 = new FuelType(2, "fuelType2", List.of());
-    Offer offer1 = new Offer(1, "Opel Astra", 1999, 100, BigDecimal.valueOf(5L), 55, 5, "red", "description", 3, carModel, bodyStyle, fuelType);
-    Offer offer2 = new Offer(2, "BMW E46", 2000, 1000, BigDecimal.valueOf(6L), 66, 5, "red", "description", 2, carModel2, bodyStyle, fuelType2);
-    Offer offer3 = new Offer(3, "Honda Civic", 2001, 1000, BigDecimal.valueOf(7L), 77, 5, "red", "description", 1, carModel, bodyStyle2, fuelType2);
+    User mockUser = mock(User.class);
+    Offer offer1 = new Offer("Opel Astra", 1999, 100, BigDecimal.valueOf(5L), 55, 5, "red", "description", 3, carModel, bodyStyle, fuelType, mockUser);
+    Offer offer2 = new Offer("BMW E46", 2000, 1000, BigDecimal.valueOf(6L), 66, 5, "red", "description", 2, carModel2, bodyStyle, fuelType2, mockUser);
+    Offer offer3 = new Offer("Honda Civic", 2001, 1000, BigDecimal.valueOf(7L), 77, 5, "red", "description", 1, carModel, bodyStyle2, fuelType2, mockUser);
 
 
     @Test
@@ -51,8 +44,8 @@ class OffersServiceTest {
         var mockOfferFilter = mock(OfferFilter.class);
         when(mockOfferFilter.getOrder()).thenReturn("low to high");
         when(mockOfferFilter.getSortBy()).thenReturn("price");
-
-        var testOfferService = new OffersService(mockEntityManager, mockOfferRepository, mockFuelTypeRepository, mockBodyStyleRepository, mockCarManufacturerRepository);
+var mockUserRepository = mock(UserRepository.class);
+        var testOfferService = new OffersService(mockEntityManager, mockOfferRepository, mockUserRepository, mockFuelTypeRepository, mockBodyStyleRepository, mockCarManufacturerRepository);
 
         var filterByManufacturerId_1 = testOfferService.filterByManufacturerId(listOfAllOffers, 1);
         assertThat(filterByManufacturerId_1).contains(offer1, offer2, offer3);

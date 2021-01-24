@@ -55,11 +55,9 @@ public DaoAuthenticationProvider daoAuthenticationProvider(){
         http.csrf().disable();
         http.authorizeRequests()
                 .antMatchers("/newoffer")
-                .hasRole("USER")
-                .antMatchers("/newoffer")
-                .hasRole("ADMIN")
+                .hasAnyRole("USER","ADMIN")
                 .antMatchers("/newoffer/*")
-                .hasRole("USER")
+                .hasAnyRole("USER","ADMIN")
                 .antMatchers("/newoffer/*")
                 .hasRole("ADMIN")
                 .antMatchers("/editoffer/*")

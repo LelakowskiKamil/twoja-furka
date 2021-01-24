@@ -1,5 +1,9 @@
 package KupAutoSklep.demo.data;
 
+import KupAutoSklep.demo.domain.model.Offer;
+
+import java.util.List;
+
 public class UserSummary {
 
     private String email;
@@ -45,4 +49,5 @@ public class UserSummary {
     public void setEnabled(boolean enabled) {
         isEnabled = enabled;
     }
+
 }

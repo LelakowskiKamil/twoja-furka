@@ -1,9 +1,17 @@
 package KupAutoSklep.demo.web.controller;
 
+import KupAutoSklep.demo.UserDisplayDetails;
 import KupAutoSklep.demo.domain.model.*;
+import KupAutoSklep.demo.domain.model.login.User;
 import KupAutoSklep.demo.service.CarModelService;
 import KupAutoSklep.demo.service.OffersService;
+import KupAutoSklep.demo.service.UserService;
+import KupAutoSklep.demo.web.command.CreateOfferCommand;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,10 +27,12 @@ import java.util.stream.IntStream;
 public class HomeController {
 
     private final OffersService offersService;
+    private final UserService userService;
     private final CarModelService carModelService;
 
-    public HomeController(OffersService offersService, CarModelService carModelService) {
+    public HomeController(OffersService offersService, UserService userService, CarModelService carModelService) {
         this.offersService = offersService;
+        this.userService = userService;
         this.carModelService = carModelService;
     }
 
@@ -37,10 +47,19 @@ public class HomeController {
     @GetMapping("/offer/{id}")
     public String offerDetails(Model model, @PathVariable("id") Integer id) {
         Offer offer = offersService.getOffer(id);
+        User user = offer.getUser();
+        model.addAttribute("user", user);
+
         model.addAttribute("offer", offer);
         return "offerDetails";
     }
 
+    @GetMapping("/userinfo/{id}")
+    public String userDetail(Model model, @PathVariable("id") long id) {
+        User user = userService.findById(id);
+        model.addAttribute("user", user);
+        return "userInfo";
+    }
 
 //    @GetMapping("/offers")
 //    public String home(Model model, OfferFilter offerFilter, Integer page) {
@@ -75,6 +94,9 @@ public class HomeController {
     public String offersPage(
             Model model,
             OfferFilter offerFilter) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        System.out.println(auth.getPrincipal());
 
         Page<Offer> offersPage = offersService.paginateOffers(offerFilter);
 
@@ -115,9 +137,16 @@ public class HomeController {
         return "createOffer";
     }
 
+
+
     @PostMapping("/newoffer")
-    public String saveNewOffer(@Valid Offer offer, BindingResult bindingResult, Model model) {
+    public String saveNewOffer(@Valid CreateOfferCommand offer, BindingResult bindingResult, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails)auth.getPrincipal();
+        User user = userService.findByUsername(userDetails.getUsername());
+        offer.setUser(user);
         if (bindingResult.hasErrors()) {
+
             List<CarModel> carModels = carModelService.getCarModels();
             List<BodyStyle> bodyStyles = offersService.getBodyStyles();
             List<FuelType> fuelTypes = offersService.getFuelTypes();
@@ -125,12 +154,13 @@ public class HomeController {
             model.addAttribute("carModels", carModels);
             model.addAttribute("bodyStyles", bodyStyles);
             model.addAttribute("fuelTypes", fuelTypes);
+            System.out.println(bindingResult.getAllErrors().toString());
             System.out.println("Blad!!!!");
             return "createOffer";
         }
-        offer = offersService.createOffer(offer);
-        System.out.println("dane poprawne");
-        return "redirect:/offer/" + offer.getId();
+
+        Offer createdOffer = offersService.createOffer(offer);
+        return "redirect:/offer/" + createdOffer.getId();
     }
 
     @RequestMapping("/deleteoffer/{id}")
