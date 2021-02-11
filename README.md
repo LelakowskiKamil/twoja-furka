@@ -16,6 +16,8 @@ The application is called "TwojaFurka" and it is similar to the popular OTO-MOTO
 
 ## Table of Contents
 - [The main functions of the application](#The-main-functions-of-the-application)
+- [Entities](#Entities)
+- [How to start](#How-to-start?)
 
 ## The main functions of the application
   - Management of advertisements:
