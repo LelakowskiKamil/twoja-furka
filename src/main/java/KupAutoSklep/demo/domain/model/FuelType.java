@@ -42,4 +42,13 @@ public class FuelType {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "FuelType{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", offers=" + offers +
+                '}';
+    }
 }

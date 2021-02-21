@@ -1,68 +1,135 @@
 package KupAutoSklep.demo.service;
 
 import KupAutoSklep.demo.domain.model.*;
+import KupAutoSklep.demo.domain.model.login.Role;
 import KupAutoSklep.demo.domain.model.login.User;
-import KupAutoSklep.demo.domain.repository.*;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.Sort;
-
-import javax.persistence.EntityManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
+@SpringBootTest
+@ActiveProfiles("tests")
 class OffersServiceTest {
-    CarManufacturer carManufacturer = new CarManufacturer(1, "carManufacturer");
-    CarModel carModel = new CarModel(1, "carModel", carManufacturer, List.of());
-    CarModel carModel2 = new CarModel(2, "carModel2", carManufacturer, List.of());
-    BodyStyle bodyStyle = new BodyStyle(1, "bodyStyle", List.of());
-    BodyStyle bodyStyle2 = new BodyStyle(2, "bodyStyle2", List.of());
-    FuelType fuelType = new FuelType(1, "fuelType", List.of());
-    FuelType fuelType2 = new FuelType(2, "fuelType2", List.of());
-    User mockUser = mock(User.class);
-    Offer offer1 = new Offer("Opel Astra", 1999, 100, BigDecimal.valueOf(5L), 55, 5, "red", "description", 3, carModel, bodyStyle, fuelType, mockUser);
-    Offer offer2 = new Offer("BMW E46", 2000, 1000, BigDecimal.valueOf(6L), 66, 5, "red", "description", 2, carModel2, bodyStyle, fuelType2, mockUser);
-    Offer offer3 = new Offer("Honda Civic", 2001, 1000, BigDecimal.valueOf(7L), 77, 5, "red", "description", 1, carModel, bodyStyle2, fuelType2, mockUser);
+    Offer createDefaultOffer() {
+        Offer offer1 = new Offer();
+        offer1.setTitle("Opel Astra");
+        offer1.setId(1);
+        offer1.setYear(1999);
+        offer1.setDoors(5);
+        offer1.setEnginePower(5);
+        offer1.setPrice(5);
+        offer1.setMileage(100);
+        offer1.setColour("red");
+        offer1.setEngineSize(BigDecimal.valueOf(5L));
+        offer1.setDescription("description");
+        offer1.setModel(createDefaultCarModel());
+        offer1.setUser(createDefaultUser());
+        offer1.setFuelType(createDefaultFuelType());
+        offer1.setBodyStyle(createDefaultBodyStyle());
 
+        return offer1;
+    }
+
+    Offer createDefaultOffer(int year) {
+        Offer offer1 = new Offer();
+        offer1.setTitle("Opel Astra");
+        offer1.setId(1);
+        offer1.setYear(year);
+        offer1.setDoors(5);
+        offer1.setEnginePower(5);
+        offer1.setPrice(5);
+        offer1.setMileage(100);
+        offer1.setColour("red");
+        offer1.setEngineSize(BigDecimal.valueOf(5L));
+        offer1.setDescription("description");
+        offer1.setModel(createDefaultCarModel());
+        offer1.setUser(createDefaultUser());
+        offer1.setFuelType(createDefaultFuelType());
+        offer1.setBodyStyle(createDefaultBodyStyle());
+
+        return offer1;
+    }
+
+    CarManufacturer createDefaultCarManufacturer() {
+        CarManufacturer carManufacturer = new CarManufacturer();
+        carManufacturer.setId(1);
+        carManufacturer.setName("carManufacturer");
+        return carManufacturer;
+    }
+
+    BodyStyle createDefaultBodyStyle() {
+        BodyStyle bodyStyle = new BodyStyle();
+        bodyStyle.setId(1);
+        bodyStyle.setName("bodyStyle");
+        return bodyStyle;
+    }
+
+    FuelType createDefaultFuelType() {
+        FuelType fuelType = new FuelType();
+        fuelType.setId(1);
+        fuelType.setName("fuelType");
+        return fuelType;
+    }
+
+    Role createAdminRole() {
+        Role role = new Role();
+        role.setId(1);
+        role.setName("ADMIN");
+        return role;
+    }
+
+    CarModel createDefaultCarModel() {
+        CarModel carModel = new CarModel();
+        carModel.setId(1);
+        carModel.setName("carModel");
+        carModel.setManufacturer(createDefaultCarManufacturer());
+        return carModel;
+    }
+
+    User createDefaultUser() {
+        User user = new User();
+        user.setId(1);
+        user.setUsername("username");
+        user.setPassword("!Haslo123");
+        user.setFirstname("username");
+        user.setEmail("username@email");
+        user.setRoles(Collections.singletonList(createAdminRole()));
+        return user;
+    }
+
+    @Autowired
+    private OffersService offersService;
 
     @Test
-    void getOffersOrdered() {
-        var mockEntityManager = mock(EntityManager.class);
-        var mockOfferRepository = mock(OfferRepository.class);
-        var listOfAllOffers = List.of(offer1, offer2, offer3);
-        var listOfAllOffersSortByPriceOrderedASC = List.of(offer3, offer2, offer1);
-
-        when(mockOfferRepository.findAll()).thenReturn(List.of(offer1, offer2, offer3));
-        when(mockOfferRepository.findAll(Sort.by(Sort.Direction.ASC, "price"))).thenReturn(List.of(offer3, offer2, offer1));
-        var mockFuelTypeRepository = mock(FuelTypeRepository.class);
-        var mockBodyStyleRepository = mock(BodyStyleRepository.class);
-        var mockCarManufacturerRepository = mock(CarManufacturerRepository.class);
-        var mockOfferFilter = mock(OfferFilter.class);
-        when(mockOfferFilter.getOrder()).thenReturn("low to high");
-        when(mockOfferFilter.getSortBy()).thenReturn("price");
-var mockUserRepository = mock(UserRepository.class);
-        var testOfferService = new OffersService(mockEntityManager, mockOfferRepository, mockUserRepository, mockFuelTypeRepository, mockBodyStyleRepository, mockCarManufacturerRepository);
-
-        var filterByManufacturerId_1 = testOfferService.filterByManufacturerId(listOfAllOffers, 1);
-        assertThat(filterByManufacturerId_1).contains(offer1, offer2, offer3);
-
-        var filterByManufacturerId_2 = testOfferService.filterByManufacturerId(listOfAllOffers, 2);
-        assertThat(filterByManufacturerId_2).isEmpty();
-
-        var filterByYear_produceBeforeOrIn2000 = testOfferService.filterByYearTo(listOfAllOffers, 2000);
-        assertThat(filterByYear_produceBeforeOrIn2000).contains(offer1, offer2);
-        assertThat(filterByYear_produceBeforeOrIn2000).doesNotContain(offer3);
-
-        var filterByYear_produceAfterOrIn2001 = testOfferService.filterByYearFrom(listOfAllOffers, 2001);
-        assertThat(filterByYear_produceAfterOrIn2001).contains(offer3);
-        assertThat(filterByYear_produceAfterOrIn2001).doesNotContain(offer1, offer2);
-
-        var result = testOfferService.getOffersOrdered(mockOfferFilter);
-        assertThat(result).isEqualTo(listOfAllOffersSortByPriceOrderedASC);
+    void filterByYearTest() {
+        Offer offer1 = createDefaultOffer(2001);
+        Offer offer2 = createDefaultOffer(1996);
+        Offer offer3 = createDefaultOffer(2005);
+        List<Offer> offers = List.of(offer1, offer2, offer3);
+        int yearFrom = 1999;
+        List<Offer> filteredOffers = offersService.filterByYearFrom(offers, yearFrom);
+        assertThat(List.of(offer1, offer3).containsAll(filteredOffers)).isTrue();
+        assertThat(filteredOffers.contains(offer2)).isFalse();
     }
+
+    @Test
+    void filterToYearTest() {
+        Offer offer1 = createDefaultOffer(2001);
+        Offer offer2 = createDefaultOffer(1996);
+        Offer offer3 = createDefaultOffer(2005);
+        List<Offer> offers = List.of(offer1, offer2, offer3);
+        int yearFrom = 2001;
+        List<Offer> filteredOffers = offersService.filterByYearTo(offers, yearFrom);
+        assertThat(List.of(offer1, offer3).containsAll(filteredOffers)).isFalse();
+        assertThat(filteredOffers.contains(offer2)).isTrue();
+    }
+
 
 }

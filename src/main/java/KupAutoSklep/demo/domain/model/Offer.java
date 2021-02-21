@@ -1,6 +1,8 @@
 package KupAutoSklep.demo.domain.model;
 
 import KupAutoSklep.demo.domain.model.login.User;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -65,28 +67,28 @@ public class Offer {
     @Column(name = "price")
     private Integer price;
 
-    @NotNull
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     @JoinColumn(name = "model_id", referencedColumnName = "id")
+    @NotFound(action = NotFoundAction.IGNORE)
     private CarModel model;
 
-    @NotNull
     @JoinColumn(name = "body_style_id", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
+    @NotFound(action = NotFoundAction.IGNORE)
     private BodyStyle bodyStyle;
 
-    @NotNull
     @JoinColumn(name = "fuel_type_id", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
+    @NotFound(action = NotFoundAction.IGNORE)
     private FuelType fuelType;
 
-    @NotNull
+
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     private User user;
 
 
-    public Offer(@NotNull @Size(max = 255, min = 5) String title, @NotNull @Min(1900) Integer year, @NotNull @Min(0) Integer mileage, @Min(0) @Max(100) BigDecimal engineSize, @Min(0) Integer enginePower, @NotNull @Min(1) @Max(5) Integer doors, @NotNull @Size(max = 30, min = 3) String colour, @NotNull @Size(max = 65535, min = 5) String description, @NotNull @Min(0) Integer price, @NotNull CarModel model, @NotNull BodyStyle bodyStyle, @NotNull FuelType fuelType,@NotNull User user) {
+    public Offer(@NotNull @Size(max = 255, min = 5) String title, @NotNull @Min(1900) Integer year, @NotNull @Min(0) Integer mileage, @Min(0) @Max(100) BigDecimal engineSize, @Min(0) Integer enginePower, @NotNull @Min(1) @Max(5) Integer doors, @NotNull @Size(max = 30, min = 3) String colour, @NotNull @Size(max = 65535, min = 5) String description, @NotNull @Min(0) Integer price, @NotNull CarModel model, @NotNull BodyStyle bodyStyle, @NotNull FuelType fuelType, User user) {
         this.title = title;
         this.year = year;
         this.mileage = mileage;

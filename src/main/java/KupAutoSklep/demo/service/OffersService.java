@@ -1,33 +1,26 @@
 package KupAutoSklep.demo.service;
 
 import KupAutoSklep.demo.domain.model.*;
-import KupAutoSklep.demo.domain.model.login.User;
 import KupAutoSklep.demo.domain.repository.*;
 import KupAutoSklep.demo.web.command.CreateOfferCommand;
 import org.springframework.data.domain.*;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class OffersService {
 
-    @PersistenceContext
-    private EntityManager em;
-
-    public OffersService(EntityManager em,
-                         OfferRepository offerRepository,
-                         UserRepository userRepository, FuelTypeRepository fuelTypeRepository,
-                         BodyStyleRepository bodyStyleRepository,
-                         CarManufacturerRepository carManufacturerRepository) {
-        this.em = em;
+    public OffersService(
+            OfferRepository offerRepository,
+            UserRepository userRepository, FuelTypeRepository fuelTypeRepository,
+            BodyStyleRepository bodyStyleRepository,
+            CarManufacturerRepository carManufacturerRepository) {
         this.offerRepository = offerRepository;
         this.userRepository = userRepository;
         this.fuelTypeRepository = fuelTypeRepository;
@@ -42,8 +35,8 @@ public class OffersService {
     private final CarManufacturerRepository carManufacturerRepository;
 
 
-    public CarManufacturer gerCarManufacturer(int id) {
-        return em.find(CarManufacturer.class, id);
+    public Optional<CarManufacturer> gerCarManufacturer(int id) {
+        return carManufacturerRepository.findById(id);
     }
 
 
@@ -184,19 +177,19 @@ public class OffersService {
 
 
     public Offer createOffer(CreateOfferCommand createOfferCommand) {
-Offer offer = new Offer(createOfferCommand.getTitle(),createOfferCommand.getYear(),createOfferCommand.getMileage(),createOfferCommand.getEngineSize(),createOfferCommand.getEnginePower(),createOfferCommand.getDoors(),createOfferCommand.getColour(),createOfferCommand.getDescription(),createOfferCommand.getPrice(),createOfferCommand.getModel(),createOfferCommand.getBodyStyle(),createOfferCommand.getFuelType(),createOfferCommand.getUser());
-        em.persist(offer);
+        Offer offer = new Offer(createOfferCommand.getTitle(), createOfferCommand.getYear(), createOfferCommand.getMileage(), createOfferCommand.getEngineSize(), createOfferCommand.getEnginePower(), createOfferCommand.getDoors(), createOfferCommand.getColour(), createOfferCommand.getDescription(), createOfferCommand.getPrice(), createOfferCommand.getModel(), createOfferCommand.getBodyStyle(), createOfferCommand.getFuelType(), createOfferCommand.getUser());
+        saveOffer(offer);
         return offer;
     }
 
-    public Offer deleteOffer(Integer id) {
-        Offer offer = em.find(Offer.class, id);
-        em.remove(offer);
+    public Optional<Offer> deleteOffer(Integer id) {
+        Optional<Offer> offer = offerRepository.findById(id);
+        offerRepository.delete(offer.orElseThrow());
         return offer;
     }
 
     public Offer saveOffer(Offer offer) {
-        return em.merge(offer);
+        return offerRepository.save(offer);
     }
 
 

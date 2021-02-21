@@ -1,6 +1,5 @@
 package KupAutoSklep.demo.web.controller;
 
-import KupAutoSklep.demo.UserDisplayDetails;
 import KupAutoSklep.demo.domain.model.*;
 import KupAutoSklep.demo.domain.model.login.User;
 import KupAutoSklep.demo.service.CarModelService;
@@ -9,17 +8,20 @@ import KupAutoSklep.demo.service.UserService;
 import KupAutoSklep.demo.web.command.CreateOfferCommand;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -165,8 +167,8 @@ public class HomeController {
 
     @RequestMapping("/deleteoffer/{id}")
     public String deleteOffer(Model model, @PathVariable("id") Integer id) {
-        Offer offer = offersService.deleteOffer(id);
-        model.addAttribute("offer", offer);
+        Optional<Offer> offer = offersService.deleteOffer(id);
+        model.addAttribute("offer", offer.orElseThrow());
         return "deleteOffer";
     }
 

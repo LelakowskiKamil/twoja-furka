@@ -1,9 +1,8 @@
 package KupAutoSklep.demo.service;
 
-import KupAutoSklep.demo.domain.repository.UserRepository;
-import KupAutoSklep.demo.converter.UserConverter;
 import KupAutoSklep.demo.domain.model.login.Role;
 import KupAutoSklep.demo.domain.model.login.User;
+import KupAutoSklep.demo.domain.repository.UserRepository;
 import KupAutoSklep.demo.exception.UserEmailAlreadyExistException;
 import KupAutoSklep.demo.exception.UserNameAlreadyExistException;
 import KupAutoSklep.demo.web.command.CreateUserCommand;
@@ -23,12 +22,10 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final UserConverter userConverter;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, UserConverter userConverter) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.userConverter = userConverter;
     }
 
     @Override

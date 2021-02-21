@@ -1,10 +1,8 @@
 package KupAutoSklep.demo.web.command;
 
-import KupAutoSklep.demo.domain.model.Offer;
-
-import javax.persistence.Column;
-import javax.validation.constraints.*;
-import java.util.List;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 public class CreateUserCommand {
 

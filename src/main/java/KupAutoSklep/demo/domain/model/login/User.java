@@ -55,6 +55,16 @@ public class User {
 
     }
 
+    public User(long id, @NotNull String email, String username, String password, Collection<Role> roles, boolean enabled, List<Offer> offers) {
+        this.id = id;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.roles = roles;
+        this.enabled = enabled;
+        this.offers = offers;
+    }
+
     public User(@NotNull String email, String username, String password, Collection<Role> roles, boolean enabled, List<Offer> offers) {
         this.email = email;
         this.username = username;
