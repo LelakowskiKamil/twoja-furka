@@ -87,8 +87,23 @@ public class Offer {
     @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     private User user;
 
+    @Column(name = "image")
+    private String imageURL;
 
-    public Offer(@NotNull @Size(max = 255, min = 5) String title, @NotNull @Min(1900) Integer year, @NotNull @Min(0) Integer mileage, @Min(0) @Max(100) BigDecimal engineSize, @Min(0) Integer enginePower, @NotNull @Min(1) @Max(5) Integer doors, @NotNull @Size(max = 30, min = 3) String colour, @NotNull @Size(max = 65535, min = 5) String description, @NotNull @Min(0) Integer price, @NotNull CarModel model, @NotNull BodyStyle bodyStyle, @NotNull FuelType fuelType, User user) {
+
+    public Offer(
+            @NotNull @Size(max = 255, min = 5) String title,
+            @NotNull @Min(1900) Integer year,
+            @NotNull @Min(0) Integer mileage,
+            @Min(0) @Max(100) BigDecimal engineSize,
+            @Min(0) Integer enginePower,
+            @NotNull @Min(1) @Max(5) Integer doors,
+            @NotNull @Size(max = 30, min = 3) String colour,
+            @NotNull @Size(max = 65535, min = 5) String description,
+            @NotNull @Min(0) Integer price, @NotNull CarModel model,
+            @NotNull BodyStyle bodyStyle, @NotNull FuelType fuelType,
+            User user,
+            String imageURL) {
         this.title = title;
         this.year = year;
         this.mileage = mileage;
@@ -102,6 +117,7 @@ public class Offer {
         this.bodyStyle = bodyStyle;
         this.fuelType = fuelType;
         this.user = user;
+        this.imageURL = imageURL;
     }
 
     public Offer() {
@@ -218,6 +234,14 @@ public class Offer {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 
     @Override

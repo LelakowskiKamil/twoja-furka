@@ -28,7 +28,14 @@ public class CreateUserCommand {
 
     };
 
-    public CreateUserCommand(@Email(message = "This email address is invalid") String email, @Size(max = 30, min = 3) String username, @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$") String password, String firstname, String lastname, String phone, boolean isEnabled) {
+    public CreateUserCommand(
+            @Email(message = "This email address is invalid") String email,
+            @Size(max = 30, min = 3) String username,
+            @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$") String password,
+            String firstname,
+            String lastname,
+            String phone,
+            boolean isEnabled) {
         this.email = email;
         this.username = username;
         this.password = password;
@@ -71,4 +78,27 @@ public class CreateUserCommand {
         isEnabled = enabled;
     }
 
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 }

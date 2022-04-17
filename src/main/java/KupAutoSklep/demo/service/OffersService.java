@@ -96,11 +96,6 @@ public class OffersService {
         return offersToFilter;
 
     }
-//public Page<Offer> pageOffer(int pageVal, OfferFilter offerFilter){
-//
-//        return paginateOffers(pageable,offerFilter);
-//
-//}
 
     public Page<Offer> paginateOffers(OfferFilter offerFilter) {
         int page;
@@ -177,7 +172,25 @@ public class OffersService {
 
 
     public Offer createOffer(CreateOfferCommand createOfferCommand) {
-        Offer offer = new Offer(createOfferCommand.getTitle(), createOfferCommand.getYear(), createOfferCommand.getMileage(), createOfferCommand.getEngineSize(), createOfferCommand.getEnginePower(), createOfferCommand.getDoors(), createOfferCommand.getColour(), createOfferCommand.getDescription(), createOfferCommand.getPrice(), createOfferCommand.getModel(), createOfferCommand.getBodyStyle(), createOfferCommand.getFuelType(), createOfferCommand.getUser());
+        Offer offer = new Offer(
+                createOfferCommand.getTitle(),
+                createOfferCommand.getYear(),
+                createOfferCommand.getMileage(),
+                createOfferCommand.getEngineSize(),
+                createOfferCommand.getEnginePower(),
+                createOfferCommand.getDoors(),
+                createOfferCommand.getColour(),
+                createOfferCommand.getDescription(),
+                createOfferCommand.getPrice(),
+                createOfferCommand.getModel(),
+                createOfferCommand.getBodyStyle(),
+                createOfferCommand.getFuelType(),
+                createOfferCommand.getUser(),
+                createOfferCommand.getImageURL()
+        );
+        if (offer.getImageURL()== null || offer.getImageURL().trim().equals("")){
+            offer.setImageURL("https://www.audiostereo.pl/uploads/logo/nophotoLarge.png");
+        }
         saveOffer(offer);
         return offer;
     }

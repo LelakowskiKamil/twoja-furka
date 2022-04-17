@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 <body>
-<span style="alignment: left">Zalogowany użytkownik: <span>[[${#request.remoteUser}]]</span></span>
-<div sec:authorize="isAuthenticated()"><span style="alignment: right"><a href="/logout">Wyloguj</a></span></div>
+<span class="login">Zalogowany użytkownik: <span>[[${#request.remoteUser}]]</span></span>
+<div sec:authorize="isAuthenticated()"><span class="login"><a href="/logout">Wyloguj</a></span></div>
 
 <!-- create navigation bar ( header) -->
 <nav class="navbar navbar-inverse navbar-fixed-top">

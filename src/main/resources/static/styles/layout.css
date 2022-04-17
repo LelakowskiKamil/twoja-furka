@@ -1,0 +1,262 @@
+/* Card */
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
+    transition: 0.3s;
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.container {
+    padding: 2px 16px;
+}
+
+.centerBox-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.centerBox-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.cropped {
+    width: 500px; /* width of container */
+    height: 350px; /* height of container */
+    overflow: hidden;
+    border: 5px solid black;
+}
+
+
+body {
+    background-image: url("https://thumbs.dreamstime.com/b/vector-seamless-pattern-textured-retro-cars-repeat-background-vintage-colored-transport-isolated-white-cartoon-style-endless-145852723.jpg");
+    background-repeat: round;
+}
+
+.blank-background {
+    background-color: white;
+    width: fit-content;
+}
+
+.border-black {
+    border: 3px black solid;
+}
+
+.blank-background-all {
+    background-color: white;
+}
+
+
+/* Animated card */
+.topnav {
+    background-color: #333;
+    overflow: hidden;
+}
+
+.topnav a {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.topnav a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.topnav a.active {
+    background-color: #04AA6D;
+    color: white;
+}
+
+.big-font {
+    font-size: large;
+}
+
+
+.padding-area {
+    padding: 50px;
+}
+
+.offer-content {
+    background-color: lightsteelblue;
+    width: fit-content;
+}
+
+#imageCar {
+    width: 50%;
+    border: thick solid;
+}
+
+#flexOffer {
+    display: inline-flex;
+    flex-direction: row;
+    width: 1200px;
+    margin: auto;
+}
+
+#flexOfferSide {
+    width: 50%;
+    margin: auto;
+}
+
+#descriptionOffer {
+    margin-top: 50px;
+    width: 960px;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    max-width: 1400px;
+    margin: auto;
+    padding: 30px 10px 30px 10px;
+    background-color: aqua;
+}
+
+#details {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+}
+
+
+/* Table */
+
+tr {
+    border: .4pt
+}
+
+table {
+    border: thick solid;
+    border-collapse: collapse;
+}
+
+th {
+    border: thick solid;
+    width: 5%;
+}
+
+td {
+    border: thick solid;
+    padding-left: 3%;
+    width: 5%;
+}
+
+/* Shine */
+.hover14 {
+    position: relative;
+    overflow: hidden;
+}
+
+.hover14::before {
+    position: absolute;
+    top: 0;
+    left: -75%;
+    z-index: 2;
+    display: block;
+    content: '';
+    width: 50%;
+    height: 100%;
+    background: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .3) 100%);
+    background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .3) 100%);
+    -webkit-transform: skewX(-25deg);
+    transform: skewX(-25deg);
+}
+
+.hover14:hover::before {
+    -webkit-animation: shine .75s;
+    animation: shine .75s;
+}
+
+@-webkit-keyframes shine {
+    100% {
+        left: 125%;
+    }
+}
+
+@keyframes shine {
+    100% {
+        left: 125%;
+    }
+}
+
+/* Login style */
+
+.login {
+    alignment: left;
+}
+
+.form-inline-block {
+    display: inline-block;
+}
+
+/* Utils */
+
+.layoutImg {
+    float: right;
+    height: 53px;
+}
+
+#newOffer {
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.newOfferFont {
+    font-size: 18px;
+}
+
+#editOffer {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+#searchOffets {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.userInfoFontBold{
+    font-weight: bold;
+}
+
+.descriptionWidth{
+    width: 1000px;
+}
+
+.offerListText{
+    font-size:100%;
+    font-weight: normal;
+}
+
+.offerListShortWidth{
+    width: 100px;
+}
+
+.offerListLongWidth{
+    width: 220px;
+}
+
+.marginTop20{
+    margin-top: 20px;
+}
+
+.horizontalCenterMargins{
+    margin-left: auto;
+    margin-right: auto
+}

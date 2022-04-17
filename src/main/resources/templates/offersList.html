@@ -8,94 +8,93 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <style>
-        td {
-            border: 1px solid black;
-        }
-    </style>
+    <link th:href="@{/styles/layout.css}" rel="stylesheet"/>
 </head>
 <body>
-<span style="alignment: left">Zalogowany użytkownik: <span>[[${#request.remoteUser}]]</span></span>
-<div sec:authorize="isAuthenticated()"><span style="alignment: right"><a href="/logout">Wyloguj</a></span></div>
+<span class="blank-background login">Zalogowany użytkownik:
+            <a th:if="${#request.remoteUser}!=null" th:href="|/userinfo/?username=${#request.remoteUser}|">[[${#request.remoteUser}]]</a>
+            <a sec:authorize="!isAuthenticated()" href="/login">Zaloguj</a>
+            <a sec:authorize="!isAuthenticated()" href="/registration">Zarejestruj</a>
+            <a sec:authorize="isAuthenticated()" href="/logout">Wyloguj</a>
+        </span>
+<div class="topnav">
+    <a class="active big-font" href="/">TwojaFurka <small>Najlepsze furki w necie</small></a>
+    <a class="big-font" href="/offers">Przeglądaj ogłoszenia</a>
+    <a class="big-font" href="/newoffer">Dodaj ogłoszenie</a>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/BlondeWomanDrivingCar.svg" class="layoutImg"
+         alt="logo"/>
+</div>
 
-<!-- create navigation bar ( header) -->
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <form method="get" action="/">
-                <button type="submit">Wróć do strony głównej</button>
-            </form>
+<div class="centerBox-row">
+    <section layout:fragment="content" class="blank-background padding-area border-black">
+        <div id="offerFilter" class="panel panel-default">
+            <div class="panel-heading" align="center"><p id="searchOffets">Szukaj ofert</p></div>
+            <div class="panel-body" align="center">
+                <form id="offerFilterForm" action="/offers" method="get" class="form-inline offerListText"
+                      th:object="${offerFilter}">
+                    <select class="form-control offerListText" th:field="*{manufacturerId}">
+                        <option value="">Marka</option>
+                        <option th:each="manufacturer : ${carManufacturers}" th:value="${manufacturer.id}"
+                                th:text="${manufacturer.name}"></option>
+                    </select>
+                    <select class="form-control offerListText" th:field="*{modelId}">
+                        <option value="">Model</option>
+                        <option th:each="model : ${carModels}" th:value="${model.id}" th:text="${model.name}"></option>
+                    </select>
+                    <input type="number" class="form-control offerListText" th:field="*{fromYear}"/>
+                    <input type="number" class="form-control offerListText" th:field="*{toYear}"/>
+                    <select class="form-control offerListText" th:field="*{sortBy}">
+                        <option value="">Sort by:</option>
+                        <option th:each="attribute : ${attributes}" th:value="${attribute}"
+                                th:text="${attribute}"></option>
+                    </select>
+                    <select class="form-control offerListText" th:field="*{order}">
+                        <option value="">Order:</option>
+                        <option th:each="order : ${orders}" th:value="${order}" th:text="${order}"></option>
+                    </select>
+                    <select class="form-control offerListText" th:field="*{pageSize}">
+                        <option value="">Offers per page:</option>
+                        <option th:each="size : ${pageSizeValues}" th:value="${size}" th:text="${size}"></option>
+                    </select>
+                    <input type="submit" value="Filtruj" class="form-control"/>
+                    <br>
+
+                    <div th:if="${offers.totalPages > 0}" class="pagination"
+                         th:each="pageNumber : ${pageNumbers}" style="display: inline-flex">
+                        <a th:href="@{/offers(manufacturerId=*{manufacturerId}, modelId=*{modelId},
+                         fromYear=*{fromYear}, toYear=*{toYear}, sortBy=*{sortBy}, order=*{order},
+                          pageSize=*{pageSize}, page=${pageNumber}  )}"
+                           th:text=${pageNumber}
+                           th:class="${pageNumber==offers.number + 1} ? active"></a>
+                    </div>
+                </form>
+
+            </div>
         </div>
-    </div>
-</nav>
-
-
-<section layout:fragment="content">
-    <div id="offerFilter" class="panel panel-default">
-        <div class="panel-heading" align="center"><p style="font-size:32px;font-weight: bold">Szukaj ofert</p></div>
-        <div class="panel-body" align="center">
-            <form id="offerFilterForm" action="/offers" method="get" class="form-inline" th:object="${offerFilter}" style="font-size:100%;font-weight: normal">
-                <select class="form-control" th:field="*{manufacturerId}" style="font-size:100%;font-weight: normal">
-                    <option value="">Marka</option>
-                    <option th:each="manufacturer : ${carManufacturers}" th:value="${manufacturer.id}"
-                            th:text="${manufacturer.name}"></option>
-                </select>
-                <select class="form-control" th:field="*{modelId}" style="font-size:100%;font-weight: normal">
-                    <option value="">Model</option>
-                    <option th:each="model : ${carModels}" th:value="${model.id}" th:text="${model.name}"></option>
-                </select>
-                <input type="number" class="form-control" th:field="*{fromYear}" style="font-size:85%;font-weight: normal; padding-top:1px"/>
-                <input type="number" class="form-control" th:field="*{toYear}" style="font-size:85%;font-weight: normal; padding-top:1px"/>
-                <select class="form-control" th:field="*{sortBy}" style="font-size:100%;font-weight: normal">
-                    <option value="">Sort by:</option>
-                    <option th:each="attribute : ${attributes}" th:value="${attribute}" th:text="${attribute}"></option>
-                </select>
-                <select class="form-control" th:field="*{order}" style="font-size:100%;font-weight: normal">
-                    <option value="">Order:</option>
-                    <option th:each="order : ${orders}" th:value="${order}" th:text="${order}"></option>
-                </select>
-                <select class="form-control" th:field="*{pageSize}" style="font-size:100%;font-weight: normal">
-                    <option value="">Offers per page:</option>
-                    <option th:each="size : ${pageSizeValues}" th:value="${size}" th:text="${size}"></option>
-                </select>
-
-
-                <input type="submit" value="Filtruj" class="form-control" style="font-size:100%;font-weight: normal"/>
-                <br>
-                <div th:if="${offers.totalPages > 0}" class="pagination"
-                     th:each="pageNumber : ${pageNumbers}" style="display: inline-flex">
-                    <a th:href="@{/offers(manufacturerId=*{manufacturerId}, modelId=*{modelId}, fromYear=*{fromYear}, toYear=*{toYear}, sortBy=*{sortBy}, order=*{order}, pageSize=*{pageSize}, page=${pageNumber}  )}"
-                       th:text=${pageNumber}
-                       th:class="${pageNumber==offers.number + 1} ? active"></a>
-
-                </div>
-            </form>
-
-        </div>
-    </div>
-    <br>
-    <br>
-    <table class="table" style="margin-left: auto;margin-right: auto">
-        <tr>
-            <th style="width: 220px">Tytuł</th>
-            <th style="width: 100px">Marka</th>
-            <th style="width: 100px">Model</th>
-            <th style="width: 100px">Rocznik</th>
-            <th style="width: 100px">Cena</th>
-            <th style="width: 100px"></th>
-        </tr>
-        <tr th:each="offer : ${offers}">
-            <td th:text="${offer.title}"></td>
-            <td th:text="${offer.model.manufacturer.name}"></td>
-            <td th:text="${offer.model.name}"></td>
-            <td th:text="${offer.year}"></td>
-            <td class="text-right">
-                <span th:text="${#numbers.formatDecimal(offer.price, 0, 'WHITESPACE', 0,'COMMA')}"></span>
-                zł
-            </td>
-            <td><a th:href="|/offer/${offer.id}|">Pokaż</a></td>
-        </tr>
-    </table>
-</section>
+        <br>
+        <br>
+        <table class="table horizontalCenterMargins">
+            <tr>
+                <th class="offerListLongWidth">Tytuł</th>
+                <th class="offerListShortWidth">Marka</th>
+                <th class="offerListShortWidth">Model</th>
+                <th class="offerListShortWidth">Rocznik</th>
+                <th class="offerListShortWidth">Cena</th>
+                <th class="offerListShortWidth"></th>
+            </tr>
+            <tr th:each="offer : ${offers}">
+                <td th:text="${offer.title}"></td>
+                <td th:text="${offer.model.manufacturer.name}"></td>
+                <td th:text="${offer.model.name}"></td>
+                <td th:text="${offer.year}"></td>
+                <td class="text-right">
+                    <span th:text="${#numbers.formatDecimal(offer.price, 0, 'WHITESPACE', 0,'COMMA')}"></span>
+                    zł
+                </td>
+                <td><a th:href="|/offer/${offer.id}|">Pokaż</a></td>
+            </tr>
+        </table>
+    </section>
+</div>
 </body>
 </html>

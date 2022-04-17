@@ -7,7 +7,7 @@
   - Thymeleaf 3
   - Hibernate
   - Spring Security
-  - MS-SQL database
+  - PostgreSQL
   
 ## Information about the project
 The application is called "TwojaFurka" and it is similar to the popular OTO-MOTO website. The user can browse ads added by other users in search of his dream car.

@@ -1,4 +1,4 @@
-package KupAutoSklep.demo;
+package KupAutoSklep.demo.data;
 
 import KupAutoSklep.demo.domain.model.login.Role;
 import KupAutoSklep.demo.domain.model.login.User;

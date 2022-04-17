@@ -13,10 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Arrays;
@@ -63,42 +60,18 @@ public class HomeController {
         return "userInfo";
     }
 
-//    @GetMapping("/offers")
-//    public String home(Model model, OfferFilter offerFilter, Integer page) {
-//        List<Offer> offers = offersService.getOffers(offerFilter.getPage());
-//
-//        if (offerFilter.getManufacturerId() != null) {
-//            offers = offers.stream()
-//                    .filter(s -> s.getModel().getManufacturer().getId().equals(offerFilter.getManufacturerId())).collect(Collectors.toList());
-//            if (offerFilter.getModelId() != null) {
-//                offers = offers.stream()
-//                        .filter(s -> s.getModel().getId().equals(offerFilter.getModelId())).collect(Collectors.toList());
-//            }
-//            List<CarModel> carModels = offersService.getCarModelByManufacturer(offerFilter.getManufacturerId());
-//            model.addAttribute("carModels", carModels);
-//        }
-//        if (offerFilter.getFromYear() != null) {
-//            offers = offers.stream()
-//                    .filter((s -> s.getYear() >= offerFilter.getFromYear())).collect(Collectors.toList());
-//        }
-//        if (offerFilter.getToYear() != null) {
-//            offers = offers.stream()
-//                    .filter((s -> s.getYear() <= offerFilter.getToYear())).collect(Collectors.toList());
-//        }
-//
-//        List<CarManufacturer> carManufacturers = offersService.getCarManufacturers();
-//        model.addAttribute("offers", offers);
-//        model.addAttribute("carManufacturers", carManufacturers);
-//        return "offersList";
-//    }
+    @GetMapping("/userinfo/")
+    public String userDetailUsername(Model model, @RequestParam(value="username") String username) {
+        User user = userService.findByUsername(username);
+        model.addAttribute("user", user);
+        return "userInfo";
+    }
 
     @GetMapping("/offers")
     public String offersPage(
             Model model,
             OfferFilter offerFilter) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        System.out.println(auth.getPrincipal());
 
         Page<Offer> offersPage = offersService.paginateOffers(offerFilter);
 
@@ -119,7 +92,7 @@ public class HomeController {
 
         List<String> attributes = Arrays.asList("title", "year", "mileage", "engineSize", "enginePower", "doors", "colour", "price", "model", "bodyStyle", "fuelType");
         List<String> orders = Arrays.asList("low to high", "high to low");
-        List<Integer> pageSizeValues = Arrays.asList(1,2,4);
+        List<Integer> pageSizeValues = Arrays.asList(1,2,4,8,16);
         model.addAttribute("attributes", attributes);
         model.addAttribute("orders", orders);
         model.addAttribute("carManufacturers", carManufacturers);
@@ -128,7 +101,7 @@ public class HomeController {
     }
 
     @GetMapping("/newoffer")
-    public String newOfferForm(Offer offer, CarManufacturer carManufacturer, OfferFilter offerFilter, Model model) {
+    public String newOfferForm(Offer offer, OfferFilter offerFilter, Model model) {
         List<CarModel> carModels = carModelService.getCarModels();
         List<BodyStyle> bodyStyles = offersService.getBodyStyles();
         List<FuelType> fuelTypes = offersService.getFuelTypes();
@@ -139,10 +112,8 @@ public class HomeController {
         return "createOffer";
     }
 
-
-
     @PostMapping("/newoffer")
-    public String saveNewOffer(@Valid CreateOfferCommand offer, BindingResult bindingResult, Model model) {
+    public String saveNewOffer(@ModelAttribute("offer") @Valid CreateOfferCommand offer, BindingResult bindingResult, Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails)auth.getPrincipal();
         User user = userService.findByUsername(userDetails.getUsername());
@@ -156,8 +127,6 @@ public class HomeController {
             model.addAttribute("carModels", carModels);
             model.addAttribute("bodyStyles", bodyStyles);
             model.addAttribute("fuelTypes", fuelTypes);
-            System.out.println(bindingResult.getAllErrors().toString());
-            System.out.println("Blad!!!!");
             return "createOffer";
         }
 

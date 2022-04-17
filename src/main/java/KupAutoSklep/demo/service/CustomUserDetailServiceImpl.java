@@ -1,8 +1,8 @@
 package KupAutoSklep.demo.service;
 
-import KupAutoSklep.demo.domain.repository.SqlUserRepository;
 import KupAutoSklep.demo.domain.model.login.Role;
 import KupAutoSklep.demo.domain.model.login.User;
+import KupAutoSklep.demo.domain.repository.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,15 +15,15 @@ import java.util.stream.Collectors;
 @Component
 public class CustomUserDetailServiceImpl implements CustomUserDetailService {
 
-private final SqlUserRepository sqlUserRepository;
+private final UserRepository userRepository;
 
-    public CustomUserDetailServiceImpl(SqlUserRepository sqlUserRepository) {
-        this.sqlUserRepository = sqlUserRepository;
+    public CustomUserDetailServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = sqlUserRepository.findUserByUsername(username);
+        User user = userRepository.findUserByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException("Invalid username");
         }
