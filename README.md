@@ -1,5 +1,5 @@
 # Automotive classifieds website 
-![version](https://zapodaj.net/images/bbf9ec3fabc6b.png) ![status](https://zapodaj.net/images/83334bb6d63dc.png)
+![Preview](https://i.ibb.co/T01LF4W/image.png)
 
 # Preview
 http://34.116.175.118:8080/
