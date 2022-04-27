@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      layout:decorator="layout">
+<head>
+    <title>Lista ofert</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link th:href="@{/styles/layout.css}" rel="stylesheet"/>
+</head>
+<body>
+<span class="blank-background login">Zalogowany użytkownik:
+            <a th:if="${#request.remoteUser}!=null" th:href="|/userinfo/?username=${#request.remoteUser}|">[[${#request.remoteUser}]]</a>
+            <a sec:authorize="!isAuthenticated()" href="/login">Zaloguj</a>
+            <a sec:authorize="!isAuthenticated()" href="/registration">Zarejestruj</a>
+            <a sec:authorize="isAuthenticated()" href="/logout">Wyloguj</a>
+        </span>
+<div class="topnav">
+    <a class="active big-font" href="/">TwojaFurka <small>Najlepsze furki w necie</small></a>
+    <a class="big-font" href="/offers">Przeglądaj ogłoszenia</a>
+    <a class="big-font" href="/offers/new">Dodaj ogłoszenie</a>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/BlondeWomanDrivingCar.svg" class="layoutImg"
+         alt="logo"/>
+</div>
+
+<div class="centerBox-row">
+    <section layout:fragment="content" class="blank-background padding-area border-black">
+        <div id="offerFilter" class="panel panel-default">
+            <div class="panel-heading" align="center"><p id="searchOffets">Szukaj ofert</p></div>
+            <div class="panel-body" align="center">
+                <form id="offerFilterForm" action="/offers" method="get" class="form-inline offerListText"
+                      th:object="${offerFilter}">
+                    <select class="form-control offerListText" th:field="*{carManufacturerId}">
+                        <option value="">Marka</option>
+                        <option th:each="manufacturer : ${carManufacturers}" th:value="${manufacturer.id}"
+                                th:text="${manufacturer.name}"></option>
+                    </select>
+                    <select class="form-control offerListText" th:field="*{modelId}">
+                        <option value="">Model</option>
+                        <option th:each="model : ${carModels}" th:value="${model.id}" th:text="${model.name}"></option>
+                    </select>
+                    <input type="number" class="form-control offerListText" th:field="*{fromYear}"/>
+                    <input type="number" class="form-control offerListText" th:field="*{toYear}"/>
+                    <select class="form-control offerListText" th:field="*{sortBy}">
+                        <option value="">Sort by:</option>
+                        <option th:each="attribute : ${attributes}" th:value="${attribute}"
+                                th:text="${attribute}"></option>
+                    </select>
+                    <select class="form-control offerListText" th:field="*{order}">
+                        <option value="">Order:</option>
+                        <option th:each="order : ${orders}" th:value="${order}" th:text="${order}"></option>
+                    </select>
+                    <select class="form-control offerListText" th:field="*{pageSize}">
+                        <option value="">Offers per page:</option>
+                        <option th:each="size : ${pageSizeValues}" th:value="${size}" th:text="${size}"></option>
+                    </select>
+                    <input type="submit" value="Filtruj" class="form-control"/>
+                    <br>
+
+                    <div th:if="${offers.totalPages > 0}" class="pagination"
+                         th:each="pageNumber : ${pageNumbers}" style="display: inline-flex">
+                        <a th:href="@{/offers(manufacturer=*{carManufacturerId}, modelId=*{modelId},
+                         fromYear=*{fromYear}, toYear=*{toYear}, sortBy=*{sortBy}, order=*{order},
+                          pageSize=*{pageSize}, page=${pageNumber}  )}"
+                           th:text=${pageNumber}
+                           th:class="${pageNumber==offers.number + 1} ? active"></a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+        <br>
+        <br>
+        <table class="table horizontalCenterMargins">
+            <tr>
+                <th class="offerListLongWidth">Tytuł</th>
+                <th class="offerListShortWidth">Marka</th>
+                <th class="offerListShortWidth">Model</th>
+                <th class="offerListShortWidth">Rocznik</th>
+                <th class="offerListShortWidth">Cena</th>
+                <th class="offerListShortWidth"></th>
+            </tr>
+            <tr th:each="offer : ${offers}">
+                <td th:text="${offer.title}"></td>
+                <td th:text="${offer.model.manufacturer.name}"></td>
+                <td th:text="${offer.model.name}"></td>
+                <td th:text="${offer.year}"></td>
+                <td class="text-right">
+                    <span th:text="${#numbers.formatDecimal(offer.price, 0, 'WHITESPACE', 0,'COMMA')}"></span>
+                    zł
+                </td>
+                <td><a th:href="|/offers/${offer.id}|">Pokaż</a></td>
+            </tr>
+        </table>
+    </section>
+</div>
+</body>
+</html>
