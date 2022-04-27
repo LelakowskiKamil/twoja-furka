@@ -165,6 +165,9 @@ public class User {
                 ", roles=" + roles +
                 ", enabled=" + enabled +
                 ", offers=" + offers +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", phone='" + phone + '\'' +
                 '}';
     }
 }

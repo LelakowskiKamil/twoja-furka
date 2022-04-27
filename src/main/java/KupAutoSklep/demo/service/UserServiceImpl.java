@@ -30,9 +30,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(CreateUserCommand createUserCommand) {
-    //    setEncodedPassword(createUserCommand);
-    //    UserSummary userSummary = userConverter.toUserSummary(createUserCommand);
-        User user = new User(createUserCommand.getEmail(), createUserCommand.getUsername(), passwordEncoder.encode(createUserCommand.getPassword()), Arrays.asList(new Role("ROLE_USER")), createUserCommand.isEnabled(), Arrays.asList());
+        User user = new User();
+        user.setRoles( Arrays.asList(new Role("ROLE_USER")));
+        user.setEmail(createUserCommand.getEmail());
+        user.setUsername(createUserCommand.getUsername());
+        user.setPassword(passwordEncoder.encode(createUserCommand.getPassword()));
+        user.setEnabled(createUserCommand.isEnabled());
+        user.setOffers(Arrays.asList());
+        user.setFirstname(createUserCommand.getFirstname() != null ? createUserCommand.getFirstname() : null);
+        user.setLastname(createUserCommand.getLastname() != null ? createUserCommand.getLastname() : null);
+        user.setPhone(createUserCommand.getPhone() != null ? createUserCommand.getPhone() : null);
         if (userRepository.existsByEmail(
                 user.getEmail())) {
             throw new UserEmailAlreadyExistException(String.format(

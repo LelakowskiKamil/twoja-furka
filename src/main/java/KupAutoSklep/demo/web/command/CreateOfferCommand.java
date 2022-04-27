@@ -44,6 +44,7 @@ public class CreateOfferCommand {
     private String description;
 
     @Min(0)
+    @NotNull
     private Integer price;
 
     private CarModel model;
@@ -54,10 +55,26 @@ public class CreateOfferCommand {
 
     private User user;
 
+    private String imageURL;
+
     public CreateOfferCommand() {
     }
 
-    public CreateOfferCommand(@Size(max = 255, min = 5) String title, @Min(1900) Integer year, @Min(0) Integer mileage, @Min(0) BigDecimal engineSize, @Min(0) Integer enginePower, @Min(1) @Max(5) Integer doors, @Size(max = 30, min = 3) String colour, @Size(max = 65535, min = 5) String description, @Min(0) Integer price, CarModel model, BodyStyle bodyStyle, FuelType fuelType, User user) {
+    public CreateOfferCommand(
+            @Size(max = 255, min = 5) String title,
+            @Min(1900) Integer year,
+            @Min(0) Integer mileage,
+            @Min(0) BigDecimal engineSize,
+            @Min(0) Integer enginePower,
+            @Min(1) @Max(5) Integer doors,
+            @Size(max = 30, min = 3) String colour,
+            @Size(max = 65535, min = 5) String description,
+            @Min(0) Integer price,
+            CarModel model,
+            BodyStyle bodyStyle,
+            FuelType fuelType,
+            User user,
+            String imageURL) {
         this.title = title;
         this.year = year;
         this.mileage = mileage;
@@ -71,6 +88,7 @@ public class CreateOfferCommand {
         this.bodyStyle = bodyStyle;
         this.fuelType = fuelType;
         this.user = user;
+        this.imageURL = imageURL;
     }
 
     public String getTitle() {
@@ -175,5 +193,13 @@ public class CreateOfferCommand {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 }

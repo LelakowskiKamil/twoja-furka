@@ -7,39 +7,40 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link th:href="@{/styles/layout.css}" rel="stylesheet"/>
 </head>
 <body>
-<span style="alignment: left">Zalogowany użytkownik: <span>[[${#request.remoteUser}]]</span></span>
-<div sec:authorize="isAuthenticated()"><span style="alignment: right"><a href="/logout">Wyloguj</a></span></div>
-
-<!-- create navigation bar ( header) -->
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <form method="get" action="/">
-                <button type="submit">Wróć do strony głównej</button>
-            </form>
+<span class="blank-background login">Zalogowany użytkownik:
+            <a th:if="${#request.remoteUser}!=null" th:href="|/userinfo/?username=${#request.remoteUser}|">[[${#request.remoteUser}]]</a>
+            <a sec:authorize="!isAuthenticated()" href="/login">Zaloguj</a>
+            <a sec:authorize="!isAuthenticated()" href="/registration">Zarejestruj</a>
+            <a sec:authorize="isAuthenticated()" href="/logout">Wyloguj</a>
+        </span>
+<div class="topnav">
+    <a class="active big-font" href="/">TwojaFurka <small>Najlepsze furki w necie</small></a>
+    <a class="big-font" href="/offers">Przeglądaj ogłoszenia</a>
+    <a class="big-font" href="/newoffer">Dodaj ogłoszenie</a>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/BlondeWomanDrivingCar.svg" class="layoutImg" alt="logo"/>
+</div>
+<div class="centerBox-row">
+    <section layout:fragment="content" class="blank-background padding-area border-black">
+        <div th:object="${user}" class="horizontalCenterMargins" style="line-height:25%">
+            <p class="userInfoFontBold">Nazwa użytkownika:</p>
+            <p th:text="*{username}"></p>
+            <br>
+            <p class="userInfoFontBold">Imie:</p>
+            <p th:text="*{firstname}"></p>
+            <br>
+            <p class="userInfoFontBold">Nazwisko:</p>
+            <p th:text="*{lastname}"></p>
+            <br>
+            <p class="userInfoFontBold">Email:</p>
+            <p th:text="*{email}"></p>
+            <br>
+            <p class="userInfoFontBold">Numer telefonu:</p>
+            <p th:text="*{phone}"></p>
         </div>
-    </div>
-</nav>
-<section layout:fragment="content">
-
-    <div th:object="${user}" style="margin-left: auto;margin-right: auto; line-height:25%">
-        <p style="font-weight: bold">Nazwa użytkownika:</p>
-        <p th:text="*{username}"></p>
-        <br>
-        <p style="font-weight: bold">Imie:</p>
-        <p th:text="*{firstname}"></p>
-        <br>
-        <p style="font-weight: bold">Nazwisko:</p>
-        <p th:text="*{lastname}"></p>
-        <br>
-        <p style="font-weight: bold">Email:</p>
-        <p th:text="*{email}"></p>
-        <br>
-        <p style="font-weight: bold">Numer telefonu:</p>
-        <p th:text="*{phone}"></p>
-    </div>
-</section>
+    </section>
+</div>
 </body>
 </html>

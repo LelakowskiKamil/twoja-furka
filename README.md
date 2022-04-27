@@ -1,5 +1,8 @@
 # Automotive classifieds website 
-![version](https://zapodaj.net/images/bbf9ec3fabc6b.png) ![status](https://zapodaj.net/images/83334bb6d63dc.png)
+![Preview](https://i.ibb.co/T01LF4W/image.png)
+
+# Preview
+http://34.116.175.118:8080/
 
 ## Technologies used
   - Java 11 version
@@ -7,7 +10,7 @@
   - Thymeleaf 3
   - Hibernate
   - Spring Security
-  - MS-SQL database
+  - PostgreSQL
   
 ## Information about the project
 The application is called "TwojaFurka" and it is similar to the popular OTO-MOTO website. The user can browse ads added by other users in search of his dream car.
@@ -57,9 +60,9 @@ The application is called "TwojaFurka" and it is similar to the popular OTO-MOTO
   - fuel type
   - body style
   - author of the advertisement
+  - imageURL
   
   ## How to start?
-When launching the application for the first time, check that the flag is set in the production settings of the application (application-prod.properties)
-`spring.jpa.hibernate.ddl-auto=create` .
-After the first start of the project, the database schema will be created and when the application is restarted, the flag should be changed to
-`spring.jpa.hibernate.ddl-auto=validate` .
+Application is deployed on Google cloud and available here:
+http://34.116.175.118:8080/
+You can also download the project manually, change flag in application-test.properties: `spring.jpa.hibernate.ddl-auto=create` and start the application
